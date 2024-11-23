@@ -1,0 +1,1 @@
+WINDOW_TITLE = "Next Brush Stroke Predictor"
