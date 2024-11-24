@@ -1,1 +1,6 @@
 WINDOW_TITLE = "Next Brush Stroke Predictor"
+
+
+UI_COLOR = '#D5D5D6'
+BG_COLOR = '#61606D'
+TRIM_COLOR = '#544FBC'
