@@ -2,4 +2,4 @@
 Description: 
 
 ## Setup
-1. Install dependencies: numpy, pillow ``
+1. Install dependencies: pip install -r requirements.txt

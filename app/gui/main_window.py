@@ -7,8 +7,8 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-
-from app import WINDOW_TITLE, UI_COLOR, TRIM_COLOR, BG_COLOR, BrushTool
+import app
+from app import WINDOW_TITLE, UI_COLOR, TRIM_COLOR, BG_COLOR, BrushTool, GenerateTool, HeaderTool, DrawingCanvasFrame
 
 class MainWindow(tk.Tk):
     def __init__(self):
@@ -19,19 +19,29 @@ class MainWindow(tk.Tk):
         screen_height = self.winfo_screenheight()
         self.geometry(f"{screen_width - 200}x{screen_height - 200}+5+5")
         self.resizable(True, True)
+        self.config(bg=UI_COLOR)
 
         self.config_menu()
 
         main_frame = tk.Frame(self, bg=UI_COLOR)
         main_frame.pack(fill='both',expand=True, padx=10, pady=20)
 
+        header_tool_frame = tk.Frame(main_frame, bg=UI_COLOR, height=50)
+        header_tool_frame.pack(fill='x')
+
         inner_frame =tk.Frame(main_frame, 
                               bg=BG_COLOR,
                               border = 3,
                               relief='sunken')
         inner_frame.pack(fill='both', expand= True, padx=2, pady=2)
-        
+
+        right_frame = tk.Frame(inner_frame, bg= BG_COLOR)
+        right_frame.pack(side=tk.RIGHT)
+
         brush_tool = BrushTool(inner_frame) 
+        generate_tool = GenerateTool(right_frame)
+        header_tool = HeaderTool(header_tool_frame)
+        drawing_canvas = DrawingCanvasFrame(inner_frame, brush_tool, header_tool)
 
 
 

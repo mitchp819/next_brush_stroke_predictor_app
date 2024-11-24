@@ -7,7 +7,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import  UI_COLOR, TRIM_COLOR, BG_COLOR, greyscale_value_to_hex, WindowHeader
+from app import  UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, greyscale_value_to_hex
 
 
 class BrushTool(tk.Frame):
@@ -39,20 +39,20 @@ class BrushTool(tk.Frame):
                                         font=("TkDefaultFont", 10),
                                         relief='groove',
                                         borderwidth=5 ,
-                                        bg = UI_COLOR)
+                                        bg = SECONDARY_COLOR)
         generate_stroke_btn.pack( pady = 3, padx=3, fill='x')
         
     def get_greyscale_value(self):
-        return self.greyscale_value
+        return self.greyscale_value.get()
     def get_brush_size(self):
-        return self.brush_size
+        return self.brush_size.get()
 
     def create_sample_brush_frame(self, container):
         frame = tk.Frame(
             container,
             height = 80,
             width= 80,
-            bg='lightblue',
+            bg= SECONDARY_COLOR,
             border=4,
             relief='groove'
         )
@@ -88,7 +88,7 @@ class BrushTool(tk.Frame):
             variable=self.brush_size,
             showvalue=False,
             width=30,
-            bg='lightblue',
+            bg=SECONDARY_COLOR,
             foreground='black',
             command = self.update_sample_brush
         )
@@ -103,7 +103,7 @@ class BrushTool(tk.Frame):
             variable=self.greyscale_value,
             showvalue=False,
             width=30,
-            bg='lightblue',
+            bg=SECONDARY_COLOR,
             command = self.update_sample_brush
         )
         greyscale_value_slider.grid(column=1,row=1, padx=3, pady=3)
