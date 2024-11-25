@@ -12,7 +12,7 @@ except ImportError:
 from app import greyscale_value_to_hex, HeaderTool
 
 class DrawingCanvasFrame(ttk.Frame):
-    def __init__(self, container, brush_tool, data_gather_tool,image_scalor = 6, image_width = 128, image_height = 128):
+    def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
         super().__init__(container)
 
         self.img_x = image_width
@@ -20,8 +20,9 @@ class DrawingCanvasFrame(ttk.Frame):
         self.img_sclr = image_scalor
         self.win_x = self.img_x * self.img_sclr
         self.win_y = self.img_y * self.img_sclr
-        self.brush_tool = brush_tool
-        self.data_gather_tool = data_gather_tool
+        self.brush_tool = None
+        self.data_gather_tool = None
+        self.app_console = None
         
         #gui
         self.canvas = tk.Canvas(self, width=self.win_x, height=self.win_y, bg='white')
@@ -40,6 +41,13 @@ class DrawingCanvasFrame(ttk.Frame):
         self.canvas.bind("<B1-Motion>", self.create_mark)
         self.canvas.bind("<ButtonRelease-1>", self.on_mouse_released)
         pass
+
+    def set_brush_tool(self, brush_tool):
+        self.brush_tool = brush_tool
+    def set_data_gather_tool(self, data_gather_tool):
+        self.data_gather_tool = data_gather_tool
+    def set_app_console(self, app_console):
+        self.app_console = app_console
     
     def on_mouse_down(self, event):
         if  self.data_gather_tool.get_data_gather_mode() == 'auto':
@@ -105,9 +113,11 @@ class DrawingCanvasFrame(ttk.Frame):
             self.compiled_data = insertion_data
         else:
             self.compiled_data = np.concatenate((self.compiled_data, insertion_data), axis=0)
+        self.app_console.print_to_console("Saved to Dataset: " + str(self.compiled_data.shape))
         print(self.compiled_data.shape)
         pass
 
     def reset_stroke(self):
         self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)
+        self.app_console.print_to_console("Stroke Data Reset")
         print("Stroke Data Reset")

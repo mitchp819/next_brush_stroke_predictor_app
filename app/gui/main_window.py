@@ -8,7 +8,7 @@ except ImportError:
     pass
 
 import app
-from app import WINDOW_TITLE, UI_COLOR, TRIM_COLOR, BG_COLOR, BrushTool, GenerateTool, HeaderTool, DrawingCanvasFrame
+from app import WINDOW_TITLE, UI_COLOR, TRIM_COLOR, BG_COLOR, BrushTool, GenerateTool, HeaderTool, DrawingCanvasFrame, AppConsole
 
 class MainWindow(tk.Tk):
     def __init__(self):
@@ -40,9 +40,17 @@ class MainWindow(tk.Tk):
 
         brush_tool = BrushTool(inner_frame) 
         generate_tool = GenerateTool(right_frame)
+        app_console = AppConsole(right_frame)
         header_tool = HeaderTool(header_tool_frame)
-        drawing_canvas = DrawingCanvasFrame(inner_frame, brush_tool, header_tool)
+        drawing_canvas = DrawingCanvasFrame(inner_frame)
+        
+        header_tool.set_drawing_canvas(drawing_canvas)
+        header_tool.set_app_console(app_console)
+        drawing_canvas.set_brush_tool(brush_tool)
+        drawing_canvas.set_data_gather_tool(header_tool)
+        drawing_canvas.set_app_console(app_console)
 
+        header_tool.toggle_data_gather_mode('auto')
 
 
     def config_menu(self):
