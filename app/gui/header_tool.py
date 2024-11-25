@@ -24,7 +24,7 @@ class HeaderTool(tk.Frame):
                                      bg = SECONDARY_COLOR,
                                      relief='groove',
                                      border=3,
-                                     command= self.save_dataset,
+                                     command= self.save_image,
                                      font=("TkDefaultFont", 10))
         save_image_btn.pack(side = tk.LEFT, padx=10)
         save_dataset_btn = tk.Button(main_frame, 
@@ -32,7 +32,7 @@ class HeaderTool(tk.Frame):
                                      bg = SECONDARY_COLOR,
                                      relief='groove',
                                      border=3,
-                                     command= self.save_dataset,
+                                     command= self.save_dataset_to_db,
                                      font=("TkDefaultFont", 10))
         save_dataset_btn.pack(side=tk.LEFT, padx=10)
 
@@ -112,14 +112,15 @@ class HeaderTool(tk.Frame):
         pass
 
     def save_to_dataset(self):
-        self.drawing_canvas.save_to_data_set()
+        self.drawing_canvas.save_stroke_to_dataset()
         pass
 
     def reset_stroke(self):
         self.drawing_canvas.reset_stroke()
         pass
 
-    def save_dataset(self):
+    def save_dataset_to_db(self):
+        self.drawing_canvas.save_dataset_to_db('db1')
         pass
 
     def save_image(self):

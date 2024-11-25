@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 import numpy as np
+from PIL import Image
+import os
+import re
 
 try:
     from ctypes import windll
@@ -9,7 +12,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import greyscale_value_to_hex, HeaderTool
+from app import greyscale_value_to_hex, HeaderTool, ROOT_DIR
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -23,6 +26,7 @@ class DrawingCanvasFrame(ttk.Frame):
         self.brush_tool = None
         self.data_gather_tool = None
         self.app_console = None
+        self.file_count = get_last_file_id('db1')
         
         #gui
         self.canvas = tk.Canvas(self, width=self.win_x, height=self.win_y, bg='white')
@@ -58,7 +62,7 @@ class DrawingCanvasFrame(ttk.Frame):
 
     def on_mouse_released(self, event):
         if self.data_gather_tool.get_data_gather_mode() == 'auto':
-            self.save_to_data_set()
+            self.save_stroke_to_dataset()
         pass
 
     def create_mark(self, event):
@@ -89,7 +93,7 @@ class DrawingCanvasFrame(ttk.Frame):
                     self.np_stroke_canvas_data[y, x] = greyscale_value
         pass
     
-    def save_to_data_set(self):
+    def save_stroke_to_dataset(self):
         #flatten and normalize between 0-1
         flat_normal_last_canvas = self.last_canvas.flatten() / 255
         flat_normal_stroke_canvas = self.np_stroke_canvas_data.flatten() /255
@@ -117,7 +121,38 @@ class DrawingCanvasFrame(ttk.Frame):
         print(self.compiled_data.shape)
         pass
 
+    def save_dataset_to_db(self, database_folder):
+        pil_main_img = Image.fromarray(self.np_main_canvas_data, mode="L")
+        root_path = ROOT_DIR
+
+        #save npy to folder
+        data_relative_path = f'data/{database_folder}/image_data/img{self.file_count + 1}data.npy'
+        data_absolute_path = os.path.join(root_path, data_relative_path)
+        np.save(data_absolute_path, self.compiled_data)
+
+        #save png to folder
+        png_relative_path = f'data/{database_folder}/final_image/img{self.file_count + 1}.png'
+        png_absolute_path = os.path.join(root_path, png_relative_path)
+        pil_main_img.save(png_absolute_path)
+
+        self.app_console.print_to_console(f"Dataset saved to Database: {database_folder}")
+        print("Image and Data Saved")
+        pass
+
     def reset_stroke(self):
         self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)
         self.app_console.print_to_console("Stroke Data Reset")
         print("Stroke Data Reset")
+
+def get_last_file_id(data_base):
+    dir_path = f'data/{data_base}/image_data'
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    files_list = [f for f in os.listdir(dir_path)
+                  if os.path.isfile(os.path.join(dir_path, f))]
+    largest_id = 0
+    for file in files_list:
+        integers = [int(s) for s in re.findall(r'\d+', file)]
+        if(integers[0] > largest_id):
+            largest_id = integers[0]
+    return largest_id
