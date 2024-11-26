@@ -7,7 +7,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import  UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, greyscale_value_to_hex
+from app import  UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT,greyscale_value_to_hex
 
 
 class BrushTool(tk.Frame):
@@ -29,7 +29,7 @@ class BrushTool(tk.Frame):
         main_frame.pack(side = tk.LEFT, padx=10, pady=5)
         header =tk.Canvas(main_frame,
                           width=frame_width ,
-                          height=30,
+                          height=HEADER_HEIGHT,
                           bg=TRIM_COLOR)
         header.pack(fill='x', pady=(0,3))
         self.create_sample_brush_frame(main_frame)

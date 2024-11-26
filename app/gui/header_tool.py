@@ -8,6 +8,7 @@ except ImportError:
     pass
 
 from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR
+from config_data_window.config_data_main import ConfigDataWindow
 
 class HeaderTool(tk.Frame):
     def __init__(self, container):
@@ -35,7 +36,14 @@ class HeaderTool(tk.Frame):
                                      command= self.save_dataset_to_db,
                                      font=("TkDefaultFont", 10))
         save_dataset_btn.pack(side=tk.LEFT, padx=10)
-
+        open_config_data_btn = tk.Button(main_frame, 
+                                     text = "Configure Data",
+                                     bg = SECONDARY_COLOR,
+                                     relief='groove',
+                                     border=3,
+                                     command= self.open_config_data,
+                                     font=("TkDefaultFont", 10))
+        open_config_data_btn.pack(side=tk.RIGHT, padx=10)
         self.create_data_gather_tool(main_frame)
 
 
@@ -109,6 +117,10 @@ class HeaderTool(tk.Frame):
             self.save_to_dataset_btn.pack(side=tk.LEFT, padx=10)
             self.reset_stroke_btn.pack(side=tk.LEFT)
             self.app_console.print_to_console("Data Gather Mode: Manual")
+        pass
+
+    def open_config_data(self):
+        ConfigDataWindow()
         pass
 
     def save_to_dataset(self):

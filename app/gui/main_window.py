@@ -7,7 +7,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-import app
+from config_data_window.config_data_main import ConfigDataWindow
 from app import WINDOW_TITLE, UI_COLOR, TRIM_COLOR, BG_COLOR, BrushTool, GenerateTool, HeaderTool, DrawingCanvasFrame, AppConsole
 
 class MainWindow(tk.Tk):
@@ -21,7 +21,10 @@ class MainWindow(tk.Tk):
         self.resizable(True, True)
         self.config(bg=UI_COLOR)
 
-        self.config_menu()
+        self.config_menu()  
+
+        #for testing delete after
+        #ConfigDataWindow()
 
         main_frame = tk.Frame(self, bg=UI_COLOR)
         main_frame.pack(fill='both',expand=True, padx=10, pady=20)

@@ -7,7 +7,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import  UI_COLOR, TRIM_COLOR, CONSOLE_INTRO_TEXT
+from app import  UI_COLOR, TRIM_COLOR, CONSOLE_INTRO_TEXT, HEADER_HEIGHT
 
 class AppConsole(tk.Frame):
     def __init__(self, container):
@@ -22,14 +22,14 @@ class AppConsole(tk.Frame):
         main_frame.pack(padx=10, pady=5)
         header =tk.Canvas(main_frame,
                           width=400 ,
-                          height=30,
+                          height=HEADER_HEIGHT,
                           bg=TRIM_COLOR)
         header.pack(fill='x', pady=(0,3))
 
         self.console = ScrolledText(main_frame, 
                                     width = 30, 
                                     height = 4, 
-                                    font = ("Helvetica", 10))
+                                    font = ("Consolas", 9))
         self.console.pack(padx=3,pady=3, fill='both')
         self.console['state'] = 'disabled'
         self.print_to_console(CONSOLE_INTRO_TEXT)
