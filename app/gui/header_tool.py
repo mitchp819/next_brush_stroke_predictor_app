@@ -7,7 +7,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR
+from app import UI_COLOR, SECONDARY_COLOR, get_SAVE_TO_DB_LIST
 from config_data_window.config_data_main import ConfigDataWindow
 
 class HeaderTool(tk.Frame):
@@ -132,7 +132,10 @@ class HeaderTool(tk.Frame):
         pass
 
     def save_dataset_to_db(self):
-        self.drawing_canvas.save_dataset_to_db('db1')
+        databases = get_SAVE_TO_DB_LIST()
+        for db in databases:
+            #should i check if db exists here? 
+            self.drawing_canvas.save_dataset_to_db(db)
         pass
 
     def save_image(self):

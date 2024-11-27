@@ -27,7 +27,7 @@ def set_LOADED_DB(input: str):
 def get_LOADED_DB() -> str:
     return LOADED_DB
 
-SAVE_TO_DB_LIST =['db1']
+SAVE_TO_DB_LIST = ['db1']
 def set_SAVE_TO_DB_LIST(input: list):
     global SAVE_TO_DB_LIST
     SAVE_TO_DB_LIST = input

@@ -26,7 +26,6 @@ class DrawingCanvasFrame(ttk.Frame):
         self.brush_tool = None
         self.data_gather_tool = None
         self.app_console = None
-        self.file_count = get_last_file_id('db1')
         
         #gui
         self.canvas = tk.Canvas(self, width=self.win_x, height=self.win_y, bg='white')
@@ -124,14 +123,15 @@ class DrawingCanvasFrame(ttk.Frame):
     def save_dataset_to_db(self, database_folder):
         pil_main_img = Image.fromarray(self.np_main_canvas_data, mode="L")
         root_path = ROOT_DIR
+        largest_id = get_last_file_id(database_folder)
 
         #save npy to folder
-        data_relative_path = f'data/{database_folder}/image_data/img{self.file_count + 1}data.npy'
+        data_relative_path = f'data/{database_folder}/image_data/img{largest_id + 1}data.npy'
         data_absolute_path = os.path.join(root_path, data_relative_path)
         np.save(data_absolute_path, self.compiled_data)
 
         #save png to folder
-        png_relative_path = f'data/{database_folder}/final_image/img{self.file_count + 1}.png'
+        png_relative_path = f'data/{database_folder}/final_image/img{largest_id + 1}.png'
         png_absolute_path = os.path.join(root_path, png_relative_path)
         pil_main_img.save(png_absolute_path)
 
