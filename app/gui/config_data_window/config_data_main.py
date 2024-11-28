@@ -8,7 +8,7 @@ except ImportError:
     pass
 
 
-from app import UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, BG_COLOR, HEADER_HEIGHT, DATA_DIR, set_LOADED_DB, get_LOADED_DB, set_SAVE_TO_DB_LIST, get_SAVE_TO_DB_LIST
+from app import UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, BG_COLOR, HEADER_HEIGHT, DATA_DIR, set_LOADED_DB, get_LOADED_DB, set_SAVE_TO_DB_LIST, get_SAVE_TO_DB_LIST, set_DATABASES, get_all_DATABASES, get_last_file_by_id
 from config_data_window import NewDB
 from config_data_window import CompileData
 
@@ -22,8 +22,17 @@ class ConfigDataWindow(tk.Toplevel):
         self.resizable(True, True)
         self.config(bg=UI_COLOR)
 
+        #Create list of current active databases
+        databases = get_all_DATABASES()
+        self.current_db_save_list = []
+        for db in databases:
+            print(db)
+            if databases.get(db)[0] == 1:
+                self.current_db_save_list.append(db)
+        print(f"current selected db {self.current_db_save_list}")
+        
         self.db_list = create_db_list()
-        self.save_to_db_list = get_SAVE_TO_DB_LIST()
+        self.save_to_db_list = self.current_db_save_list
 
         header =tk.Canvas(self,
                           width=400 ,
@@ -148,7 +157,7 @@ class ConfigDataWindow(tk.Toplevel):
 
         save_btn = tk.Button(st_db_frame,
                              text="Save",
-                             command=lambda: on_save_to_db_saved(self.save_to_db_list),
+                             command=lambda: self.on_save_to_db_saved(self.save_to_db_list),
                              border=3,
                             relief='raised',
                             font=("TkDefaultFont", 12),
@@ -159,12 +168,18 @@ class ConfigDataWindow(tk.Toplevel):
     
     def on_save_to_db_change(self, vars):
         self.save_to_db_list = [db for db, v in vars.items() if v.get() == 1]
-        print(self.save_to_db_list)
+        #print(self.save_to_db_list)
         pass
 
-def on_save_to_db_saved(save_to_db_list):
-    set_SAVE_TO_DB_LIST(save_to_db_list)
-    pass
+    def on_save_to_db_saved(self, save_to_db_list):
+        for new_db in save_to_db_list:
+            for current_db in self.current_db_save_list:
+                if current_db != new_db:
+                    path = os.path.join(DATA_DIR, f"{new_db}/image_data")
+                    largest_id = get_last_file_by_id(path) 
+                    set_DATABASES(database=new_db,save_to=1 ,dataset_count=largest_id+1)
+        #set_SAVE_TO_DB_LIST(save_to_db_list)
+        pass
 
 def on_loaded_db_change(loaded_db):
     set_LOADED_DB(loaded_db)

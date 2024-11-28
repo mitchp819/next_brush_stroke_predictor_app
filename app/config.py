@@ -1,4 +1,5 @@
 import os
+from app import get_last_file_by_id
 
 #colors
 UI_COLOR = '#D5D5D6'
@@ -19,7 +20,9 @@ DATA_DIR = os.path.abspath(os.path.join(ROOT_DIR, "data"))
 HEADER_HEIGHT = 20
 
 #data stuff
-LOADED_DB = 'db1'
+db_list = os.listdir(DATA_DIR)
+
+LOADED_DB = db_list[0]
 def set_LOADED_DB(input: str):
     global LOADED_DB
     LOADED_DB = input
@@ -27,7 +30,7 @@ def set_LOADED_DB(input: str):
 def get_LOADED_DB() -> str:
     return LOADED_DB
 
-SAVE_TO_DB_LIST = ['db1']
+SAVE_TO_DB_LIST = [db_list[0]]
 def set_SAVE_TO_DB_LIST(input: list):
     global SAVE_TO_DB_LIST
     SAVE_TO_DB_LIST = input
@@ -36,21 +39,16 @@ def get_SAVE_TO_DB_LIST() -> list:
     return SAVE_TO_DB_LIST
 
 DATABASES = {}
-def set_DATABASES(database:str, save_to = None, loaded = None, dataset_count = None):
+def set_DATABASES(database:str, save_to = None, dataset_count = None):
     global DATABASES
-    print("set_DATABASES")
     if database in DATABASES:
         db_list = DATABASES[database]
     else:
-        db_list = [0,0,0]
-    print(f"db_list = {db_list}")
+        db_list = [0,0]
     if save_to != None:
         db_list[0] = save_to
-    if loaded != None:
-        db_list[1] = loaded
     if dataset_count != None:
-        db_list[2] = dataset_count
-    print(f"db_list = {db_list}")
+        db_list[1] = dataset_count
     DATABASES[database] = db_list
     print(DATABASES)
 
@@ -59,4 +57,8 @@ def get_a_DATABASE(database:str)-> list:
 def get_all_DATABASES()->dict:
     return DATABASES
 
+#init DATABASES
+for db in db_list:
+    set_DATABASES(db)
+set_DATABASES(db_list[0],save_to= 1)
 

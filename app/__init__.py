@@ -5,9 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'util'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'gui.config_data_window'))
 
 
-from .config import *
-
 from .util.helper_functions import *
+from .config import *
 from .util.downscale_data import *
 from .gui.brush_tool import BrushTool
 from .gui.gen_tool import GenerateTool
