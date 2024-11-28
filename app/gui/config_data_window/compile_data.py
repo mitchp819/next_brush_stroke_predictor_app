@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter.messagebox import askyesno
+from tkinter.messagebox import askyesno, showinfo
 import os
 import glob
 import numpy as np
@@ -10,7 +10,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import UI_COLOR, SECONDARY_COLOR, DATA_DIR, HEADER_HEIGHT, TRIM_COLOR, BG_COLOR
+from app import UI_COLOR, SECONDARY_COLOR, DATA_DIR, HEADER_HEIGHT, TRIM_COLOR, BG_COLOR, downscale_to_all_scales_and_save
 
 class CompileData(tk.Toplevel):
     def __init__(self):
@@ -125,16 +125,27 @@ class CompileData(tk.Toplevel):
     def compile_data(self, db, flip_h, flip_v, rotate):
         print(f"{db}, H {flip_h}, V {flip_v}, R {rotate}")
         main_cat_db =  cat_data(database=db)
+        final_db = main_cat_db
         if flip_h:
             flip_db_h(main_cat_db)
+            #cat with final_db
         if flip_v:
             flip_db_v(main_cat_db)
+            #cat with final_db
         if rotate:
             rotate_db(main_cat_db)
+            #cat with final_db
+        
+        save_path = os.path.join(DATA_DIR, f'{db}/gen_data')
+        downscale_to_all_scales_and_save(final_db, save_path)
+        showinfo(title="Compiling Finished",
+                 message=f"{db} Compiled and Ready to Generate")
+        self.destroy()
         pass
 
 def cat_data(database, console =None):
     path = os.path.join(DATA_DIR, f'{database}/image_data/*.npy')
+    print(path)
     files = sorted(glob.glob(path))
     arrays = []
 

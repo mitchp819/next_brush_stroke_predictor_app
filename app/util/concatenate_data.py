@@ -12,7 +12,7 @@ def cat_data(database, console =None):
     for f in files:
         arrays.append(np.load(f))
 
-    result = np.concatenate(arrays,axis=0)
+    result = np.concatenate(arrays, axis=0)
 
     if console != None:
         console.print_to_console(f"Data concatenated into np array shape = {result.shape}") 

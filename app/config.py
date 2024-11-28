@@ -35,4 +35,28 @@ def set_SAVE_TO_DB_LIST(input: list):
 def get_SAVE_TO_DB_LIST() -> list:
     return SAVE_TO_DB_LIST
 
+DATABASES = {}
+def set_DATABASES(database:str, save_to = None, loaded = None, dataset_count = None):
+    global DATABASES
+    print("set_DATABASES")
+    if database in DATABASES:
+        db_list = DATABASES[database]
+    else:
+        db_list = [0,0,0]
+    print(f"db_list = {db_list}")
+    if save_to != None:
+        db_list[0] = save_to
+    if loaded != None:
+        db_list[1] = loaded
+    if dataset_count != None:
+        db_list[2] = dataset_count
+    print(f"db_list = {db_list}")
+    DATABASES[database] = db_list
+    print(DATABASES)
+
+def get_a_DATABASE(database:str)-> list:
+    return DATABASES[database]
+def get_all_DATABASES()->dict:
+    return DATABASES
+
 

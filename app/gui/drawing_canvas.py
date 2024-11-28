@@ -123,6 +123,7 @@ class DrawingCanvasFrame(ttk.Frame):
     def save_dataset_to_db(self, database_folder):
         pil_main_img = Image.fromarray(self.np_main_canvas_data, mode="L")
         root_path = ROOT_DIR
+        # NEEDS FIX solve create dictionary of dblist and if off=-1 and each last 
         largest_id = get_last_file_id(database_folder)
 
         #save npy to folder

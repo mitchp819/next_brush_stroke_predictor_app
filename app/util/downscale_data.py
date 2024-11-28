@@ -1,5 +1,6 @@
 import numpy as np    
-import util.helper_functions as hf
+import os
+from app import shape_img
 
 
 def downscale_dataset (data_set):
@@ -17,26 +18,34 @@ def downscale_dataset (data_set):
     return downscaled_dataset
 
 
-def downscale_to_all_scales_and_save(data_set):
+def downscale_to_all_scales_and_save(data_set, save_path):
+    sp = os.path.join(save_path, '128_data.npy')
+    np.save(sp,data_set)
+
     print("------------------Downscaling Data Set-----------------------\nThis Could Take A While depending on the size of your dataset and hardware")
     downscaled_dataset1 = downscale_dataset(data_set)
-    np.save('64x64_dataset.npy',downscaled_dataset1)
-    print(f"Scaled to 64x6 {downscaled_dataset1.shape} -------------------------------------------------------------############")
+    sp = os.path.join(save_path, '64_data.npy')
+    np.save(sp,downscaled_dataset1)
+    print(f"Scaled to 64x64 {downscaled_dataset1.shape} -------------------------------------------------------------############")
 
     downscaled_dataset2 = downscale_dataset(downscaled_dataset1)
-    np.save('32x32_dataset.npy',downscaled_dataset2)
+    sp = os.path.join(save_path, '32_data.npy')
+    np.save(sp,downscaled_dataset2)
     print(f"Scaled to 32x32 {downscaled_dataset2.shape} -------------------------------------------------------------############")
 
     downscaled_dataset3 = downscale_dataset(downscaled_dataset2)
-    np.save('16x16_dataset.npy',downscaled_dataset3)
+    sp = os.path.join(save_path, '16_data.npy')
+    np.save(sp,downscaled_dataset3)
     print(f"Scaled to 16x16 {downscaled_dataset3.shape} -------------------------------------------------------------############")
 
     downscaled_dataset4 = downscale_dataset(downscaled_dataset3)
-    np.save('8x8_dataset.npy',downscaled_dataset4)
+    sp = os.path.join(save_path, '8_data.npy')
+    np.save(sp,downscaled_dataset4)
     print(f"Scaled to 8x8 {downscaled_dataset4.shape} -------------------------------------------------------------############")
 
     downscaled_dataset5 = downscale_dataset(downscaled_dataset4)
-    np.save('4x4_dataset.npy',downscaled_dataset5)
+    sp = os.path.join(save_path, '4_data.npy')
+    np.save(sp ,downscaled_dataset5)
     print(f"Scaled to 4x4 {downscaled_dataset5.shape} -------------------------------------------------------------############")
 
     print("FINISHED\nData set downscaled to all downscales")
@@ -49,7 +58,7 @@ def downscale_img(image):
         color_value = image[-1]
         image = image[:-1]
         #print(image.shape)
-    image_shaped = hf.shape_img(image)
+    image_shaped = shape_img(image)
     new_shape = (image_shaped.shape[0] // 2, image_shaped.shape[1] // 2)
     downscaled_img = np.zeros(new_shape)
     for i in range(new_shape[0]):
