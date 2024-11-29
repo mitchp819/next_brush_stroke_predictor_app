@@ -59,6 +59,9 @@ def get_all_DATABASES()->dict:
 
 #init DATABASES
 for db in db_list:
-    set_DATABASES(db)
+    first_db_path = os.path.join(DATA_DIR,f"{db}/image_data")
+    last_id = get_last_file_by_id(first_db_path)
+    set_DATABASES(db, dataset_count= last_id+1)
+
 set_DATABASES(db_list[0],save_to= 1)
 

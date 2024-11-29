@@ -8,7 +8,7 @@ except ImportError:
     pass
 
 
-from app import UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, BG_COLOR, HEADER_HEIGHT, DATA_DIR, set_LOADED_DB, get_LOADED_DB, set_SAVE_TO_DB_LIST, get_SAVE_TO_DB_LIST, set_DATABASES, get_all_DATABASES, get_last_file_by_id
+from app import UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, BG_COLOR, HEADER_HEIGHT, DATA_DIR, set_LOADED_DB, get_LOADED_DB, set_DATABASES, get_all_DATABASES, get_last_file_by_id
 from config_data_window import NewDB
 from config_data_window import CompileData
 
@@ -25,9 +25,9 @@ class ConfigDataWindow(tk.Toplevel):
         #Create list of current active databases
         databases = get_all_DATABASES()
         self.current_db_save_list = []
-        for db in databases:
+        for db, values in databases.items():
             print(db)
-            if databases.get(db)[0] == 1:
+            if values[0] == 1:
                 self.current_db_save_list.append(db)
         print(f"current selected db {self.current_db_save_list}")
         
@@ -168,17 +168,16 @@ class ConfigDataWindow(tk.Toplevel):
     
     def on_save_to_db_change(self, vars):
         self.save_to_db_list = [db for db, v in vars.items() if v.get() == 1]
-        #print(self.save_to_db_list)
+        print(self.save_to_db_list)
         pass
 
     def on_save_to_db_saved(self, save_to_db_list):
         for new_db in save_to_db_list:
             for current_db in self.current_db_save_list:
                 if current_db != new_db:
-                    path = os.path.join(DATA_DIR, f"{new_db}/image_data")
+                    path = os.path.join(DATA_DIR, new_db)
                     largest_id = get_last_file_by_id(path) 
                     set_DATABASES(database=new_db,save_to=1 ,dataset_count=largest_id+1)
-        #set_SAVE_TO_DB_LIST(save_to_db_list)
         pass
 
 def on_loaded_db_change(loaded_db):

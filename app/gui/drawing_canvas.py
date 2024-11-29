@@ -12,7 +12,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import greyscale_value_to_hex, HeaderTool, ROOT_DIR
+from app import greyscale_value_to_hex, HeaderTool, ROOT_DIR, get_a_DATABASE
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -123,16 +123,15 @@ class DrawingCanvasFrame(ttk.Frame):
     def save_dataset_to_db(self, database_folder):
         pil_main_img = Image.fromarray(self.np_main_canvas_data, mode="L")
         root_path = ROOT_DIR
-        # NEEDS FIX solve create dictionary of dblist and if off=-1 and each last 
-        largest_id = get_last_file_id(database_folder)
+        ds_id = get_a_DATABASE(database_folder)[1]
 
         #save npy to folder
-        data_relative_path = f'data/{database_folder}/image_data/img{largest_id + 1}data.npy'
+        data_relative_path = f'data/{database_folder}/image_data/img{ds_id}data.npy'
         data_absolute_path = os.path.join(root_path, data_relative_path)
         np.save(data_absolute_path, self.compiled_data)
 
         #save png to folder
-        png_relative_path = f'data/{database_folder}/final_image/img{largest_id + 1}.png'
+        png_relative_path = f'data/{database_folder}/final_image/img{ds_id}.png'
         png_absolute_path = os.path.join(root_path, png_relative_path)
         pil_main_img.save(png_absolute_path)
 
