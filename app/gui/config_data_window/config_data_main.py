@@ -171,7 +171,7 @@ class ConfigDataWindow(tk.Toplevel):
         print(self.save_to_db_list)
         pass
 
-    def on_save_to_db_saved(self, save_to_db_list):
+    def on_save_to_db_saved(self, save_to_db_list: list):
         for new_db in save_to_db_list:
             for current_db in self.current_db_save_list:
                 if current_db != new_db:

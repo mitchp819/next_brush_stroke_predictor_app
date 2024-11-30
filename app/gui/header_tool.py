@@ -133,8 +133,9 @@ class HeaderTool(tk.Frame):
 
     def save_dataset_to_db(self):
         databases = get_all_DATABASES()
-        for db in databases:
-            if db[0] == 1:
+        print(databases)
+        for db, values in databases.items():
+            if values[0] == 1:
                 print(f"Saveing Dataset to Database: {db}")
                 self.drawing_canvas.save_dataset_to_db(db)
         pass
