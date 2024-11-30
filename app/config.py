@@ -50,7 +50,6 @@ def set_DATABASES(database:str, save_to = None, dataset_count = None):
     if dataset_count != None:
         db_list[1] = dataset_count
     DATABASES[database] = db_list
-    print(DATABASES)
 
 def get_a_DATABASE(database:str)-> list:
     return DATABASES[database]

@@ -80,7 +80,13 @@ class NewDB(tk.Toplevel):
                 if confirm_overwrite:
                     shutil.rmtree(fp)
             if (will_overwrite==False or confirm_overwrite == True):
+                fi = os.path.join(fp, 'final_image')
+                gd = os.path.join(fp, 'gen_data')
+                imd = os.path.join(fp, 'image_data')
                 os.makedirs(fp)   
+                os.makedirs(fi)
+                os.makedirs(gd)
+                os.makedirs(imd)
                 self.destroy()
         pass
          

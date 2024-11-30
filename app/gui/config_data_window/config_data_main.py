@@ -172,12 +172,28 @@ class ConfigDataWindow(tk.Toplevel):
         pass
 
     def on_save_to_db_saved(self, save_to_db_list: list):
-        for new_db in save_to_db_list:
+        '''Set all db off. Set selected on. If db is new then find id'''
+        for all_db in self.db_list:
+            save_on = 0
+            for saved_db in save_to_db_list:
+                if all_db == saved_db:
+                    save_on = 1                 
+            if save_on == 1:
+                set_DATABASES(all_db, 1)
+            else:
+                set_DATABASES(all_db, 0)
+        
+        for saved_db in save_to_db_list:
+            set_index = 1
             for current_db in self.current_db_save_list:
-                if current_db != new_db:
-                    path = os.path.join(DATA_DIR, new_db)
-                    largest_id = get_last_file_by_id(path) 
-                    set_DATABASES(database=new_db,save_to=1 ,dataset_count=largest_id+1)
+                if current_db == saved_db:
+                    set_index = 0 
+            if set_index == 1:
+                path = os.path.join(DATA_DIR,f"{saved_db}/image_data")
+                largest_id = get_last_file_by_id(path) 
+                set_DATABASES(database=saved_db ,dataset_count=largest_id+1)   
+        
+        print(get_all_DATABASES())
         pass
 
 def on_loaded_db_change(loaded_db):
