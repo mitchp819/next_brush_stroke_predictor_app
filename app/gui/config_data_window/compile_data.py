@@ -158,7 +158,6 @@ def cat_data(database, console =None):
         console.print_to_console(f"Data concatenated into np array shape = {result.shape}") 
  
     print(f"Data concatenated into np array shape = {result.shape}")
-    np.save(f'NPY_AllImageData{result.shape[2]}.npy', result)
     return result
 
 def flip_db_h(main_np):

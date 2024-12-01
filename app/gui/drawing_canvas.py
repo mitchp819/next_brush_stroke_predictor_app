@@ -26,6 +26,7 @@ class DrawingCanvasFrame(ttk.Frame):
         self.brush_tool = None
         self.data_gather_tool = None
         self.app_console = None
+        self.gen_tool = None
         
         #gui
         self.canvas = tk.Canvas(self, width=self.win_x, height=self.win_y, bg='white')
@@ -51,6 +52,8 @@ class DrawingCanvasFrame(ttk.Frame):
         self.data_gather_tool = data_gather_tool
     def set_app_console(self, app_console):
         self.app_console = app_console
+    def set_gen_tool(self, gen_tool):
+        self.gen_tool = gen_tool
     
     def on_mouse_down(self, event):
         if  self.data_gather_tool.get_data_gather_mode() == 'auto':
@@ -143,6 +146,15 @@ class DrawingCanvasFrame(ttk.Frame):
         self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)
         self.app_console.print_to_console("Stroke Data Reset")
         print("Stroke Data Reset")
+        pass
+
+    def generate_stroke(self):
+        threshold = self.gen_tool.get_threshold()
+        img_flat = self.np_main_canvas_data.flatten() / 255
+        filler =  np.array([.5])
+        input_img = np.concatenate((img_flat, filler))
+        Image.fromarray(self.np_main_canvas_data.astype('uint8'), 'L').save("assets/similar-images/input_canvas.png")
+        pass
 
 def get_last_file_id(data_base):
     dir_path = f'data/{data_base}/image_data'

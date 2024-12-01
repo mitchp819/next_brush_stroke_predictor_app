@@ -16,6 +16,8 @@ class GenerateTool(tk.Frame):
         self.threhold = tk.IntVar()
         self.threhold.set(500)
 
+        self.drawing_canvas = None
+
 
         main_frame = tk.Frame(container,
                               width=400,
@@ -42,9 +44,12 @@ class GenerateTool(tk.Frame):
         notebook.add(basic_tab, text = "Basic")
         notebook.add(adv_gen_tab, text = "Adv Generation") 
         notebook.add(adv_thresh_tab, text = "Adv Thresholding")
+        pass
     
     def get_threshold(self):
         return self.threhold
+    def set_drawing_canvas(self, drawing_canvas):
+        self.drawing_canvas = drawing_canvas
 
     def create_notebook(self, container):
         style = ttk.Style()
@@ -59,7 +64,7 @@ class GenerateTool(tk.Frame):
         process_img_btn = tk.Button(
             container,
             text="Generate Next Stroke",
-            command = self.process_image,
+            command = self.generate_image,
             borderwidth=5,
             relief='groove',
             font=("TkDefaultFont", 10),
@@ -67,7 +72,7 @@ class GenerateTool(tk.Frame):
         )
         process_img_btn.pack(fill='x', expand=True, pady=3, padx=3)
         frame = tk.Frame(container,bg=UI_COLOR)
-        label = tk.Label(frame, text= "Threshold:", bg= UI_COLOR).pack(side=tk.LEFT, padx=3,pady=3)
+        tk.Label(frame, text= "Threshold:", bg= UI_COLOR).pack(side=tk.LEFT, padx=3,pady=3)
         threshold_slider = tk.Scale(frame,
                                     from_=1,
                                     to=1000,
@@ -89,7 +94,8 @@ class GenerateTool(tk.Frame):
         frame = tk.Frame(container, bg = UI_COLOR)
         return frame
     
-    def process_image(self):
+    def generate_image(self):
+        self.drawing_canvas.generate_stroke()
         pass
 
  

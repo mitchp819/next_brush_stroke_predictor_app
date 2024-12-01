@@ -52,6 +52,8 @@ class MainWindow(tk.Tk):
         drawing_canvas.set_brush_tool(brush_tool)
         drawing_canvas.set_data_gather_tool(header_tool)
         drawing_canvas.set_app_console(app_console)
+        drawing_canvas.set_gen_tool(generate_tool)
+        generate_tool.set_drawing_canvas(drawing_canvas)
 
         header_tool.toggle_data_gather_mode('auto')
 

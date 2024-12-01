@@ -33,7 +33,9 @@ class AppConsole(tk.Frame):
         self.console.pack(padx=3,pady=3, fill='both')
         self.console['state'] = 'disabled'
         self.print_to_console(CONSOLE_INTRO_TEXT)
-        
+
+    def get_text(self):
+        return self.console.get('1.0', tk.END) 
         
     def print_to_console(self, text):
         self.console['state'] = 'normal'

@@ -8,7 +8,7 @@ except ImportError:
     pass
 
 
-from app import UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, BG_COLOR, HEADER_HEIGHT, DATA_DIR, set_LOADED_DB, get_LOADED_DB, set_DATABASES, get_all_DATABASES, get_last_file_by_id
+from app import  AppConsole, set_LOADED_DB, get_LOADED_DB, set_DATABASES, get_all_DATABASES, get_last_file_by_id, UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, BG_COLOR, HEADER_HEIGHT, DATA_DIR
 from config_data_window import NewDB
 from config_data_window import CompileData
 
@@ -26,7 +26,6 @@ class ConfigDataWindow(tk.Toplevel):
         databases = get_all_DATABASES()
         self.current_db_save_list = []
         for db, values in databases.items():
-            print(db)
             if values[0] == 1:
                 self.current_db_save_list.append(db)
         print(f"current selected db {self.current_db_save_list}")
@@ -48,6 +47,7 @@ class ConfigDataWindow(tk.Toplevel):
         self.create_header(header_tool_frame)
         self.create_load_db_frame(main_frame)
         self.create_save_to_db_frame(main_frame)
+        console = AppConsole(main_frame)
         pass
 
     def create_header(self, container: tk.Frame):
