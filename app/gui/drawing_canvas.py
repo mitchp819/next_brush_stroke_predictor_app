@@ -12,7 +12,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import greyscale_value_to_hex, ROOT_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB
+from app import greyscale_value_to_hex, shape_img, ROOT_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -174,7 +174,21 @@ class DrawingCanvasFrame(ttk.Frame):
 
         #Send input to image_processing script
         output_stroke = self.img_generator.compare_img_with_downscaled_data_set(input_img)
+        if not isinstance(output_stroke, np.ndarray):
+            print("Error: output_stroke is not a np.ndarray")
+            return
+
+        output_stroke = output_stroke[:-1]
+        output_stroke = shape_img(output_stroke)
+
+        for row, column_array in enumerate(output_stroke):
+            for col, pixel_value in enumerate(column_array):
+                pixel_value = int(pixel_value*255)
+                if pixel_value >=0:
+                    greyscale_hex = greyscale_value_to_hex(pixel_value)
+                    self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr, (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
         pass
+        
 
 def get_last_file_id(data_base):
     dir_path = f'data/{data_base}/image_data'

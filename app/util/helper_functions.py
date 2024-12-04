@@ -12,7 +12,7 @@ def canvas_np_img_to_png(canvas_data, save_name, folder_path = None):
         image = canvas_data[:-1]
         image = image * 255
         Image.fromarray(shape_img(image).astype('uint8'), 'L').save(save_name)
-        print(f"image saved under: {save_name}")
+        #print(f"image saved under: {save_name}")
 
 def shape_img (image):
     '''Turns a flattened np array into an image format. Note deminsion must be square.'''
