@@ -47,7 +47,7 @@ class HeaderTool(tk.Frame):
         self.create_data_gather_tool(main_frame)
 
 
-        
+    
     
 
     def set_drawing_canvas(self, drawing_canvas):

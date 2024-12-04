@@ -15,6 +15,7 @@ CONSOLE_INTRO_TEXT = "Next Brush Stroke Predictor Loaded\n<<<System Console>>"
 current_dir = os.path.dirname(__file__) 
 ROOT_DIR = os.path.abspath(os.path.join(current_dir, ".."))
 DATA_DIR = os.path.abspath(os.path.join(ROOT_DIR, "data"))
+ASSETS_DIR = os.path.abspath(os.path.join(ROOT_DIR, "assets"))
 
 #numbers
 HEADER_HEIGHT = 20

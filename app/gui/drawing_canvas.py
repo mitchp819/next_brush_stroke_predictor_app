@@ -12,7 +12,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import greyscale_value_to_hex, HeaderTool, ROOT_DIR, get_a_DATABASE
+from app import greyscale_value_to_hex, ROOT_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -27,6 +27,8 @@ class DrawingCanvasFrame(ttk.Frame):
         self.data_gather_tool = None
         self.app_console = None
         self.gen_tool = None
+
+        self.img_generator = ImageProcessor()
         
         #gui
         self.canvas = tk.Canvas(self, width=self.win_x, height=self.win_y, bg='white')
@@ -150,10 +152,28 @@ class DrawingCanvasFrame(ttk.Frame):
 
     def generate_stroke(self):
         threshold = self.gen_tool.get_threshold()
+
+        gen_database = get_LOADED_DB()
+        pre_path = os.path.join(DATA_DIR, f"{gen_database}/gen_data")
+        d4_path = os.path.join(pre_path, "4_data.npy")
+        d8_path = os.path.join(pre_path, "8_data.npy")
+        d16_path = os.path.join(pre_path, "16_data.npy")
+        d32_path = os.path.join(pre_path, "32_data.npy")
+        d64_path = os.path.join(pre_path, "64_data.npy")
+        d128_path = os.path.join(pre_path, "128_data.npy")
+        all_downscaled_data_paths = [d128_path, d64_path, d32_path, d16_path, d8_path, d4_path]
+
+        #self.img_generator.set_downscaled_data(all_downscaled_data_paths)
+        self.img_generator.set_data(d4_path, d8_path, d16_path, d32_path, d64_path, d128_path)
+
+        #Create input img to be sent for processing
         img_flat = self.np_main_canvas_data.flatten() / 255
         filler =  np.array([.5])
         input_img = np.concatenate((img_flat, filler))
         Image.fromarray(self.np_main_canvas_data.astype('uint8'), 'L').save("assets/similar-images/input_canvas.png")
+
+        #Send input to image_processing script
+        output_stroke = self.img_generator.compare_img_with_downscaled_data_set(input_img)
         pass
 
 def get_last_file_id(data_base):

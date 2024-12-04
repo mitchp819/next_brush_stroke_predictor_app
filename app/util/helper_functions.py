@@ -4,8 +4,10 @@ import os
 import re
 import random
 
-def canvas_np_img_to_png(canvas_data, save_name):
+def canvas_np_img_to_png(canvas_data, save_name, folder_path = None):
         '''Turns a np array with values 0-1 and a extranious last element into a png image.'''
+        if folder_path != None:
+             save_name = os.path.join(folder_path, save_name)
         #Remove the last value which is a color placeholder value and multiply by 255 to get correct values
         image = canvas_data[:-1]
         image = image * 255
