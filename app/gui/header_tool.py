@@ -141,4 +141,5 @@ class HeaderTool(tk.Frame):
         pass
 
     def save_image(self):
+        self.drawing_canvas.save_image()
         pass

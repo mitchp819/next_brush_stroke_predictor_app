@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter.messagebox import showerror
 import os
 try:
     from ctypes import windll
@@ -114,7 +115,7 @@ class ConfigDataWindow(tk.Toplevel):
             r.pack(fill='x',padx=5, pady=5)
         save_btn = tk.Button(load_db_frame,
                              text="Save",
-                             command=lambda: on_loaded_db_change(loaded_db.get()),
+                             command=lambda: self.on_loaded_db_change(loaded_db.get()),
                              border=3,
                             relief='raised',
                             font=("TkDefaultFont", 12),
@@ -196,9 +197,29 @@ class ConfigDataWindow(tk.Toplevel):
         print(get_all_DATABASES())
         pass
 
-def on_loaded_db_change(loaded_db):
-    set_LOADED_DB(loaded_db)
-    pass
+    def on_loaded_db_change(self, loaded_db):
+        correct_file_count = 0
+        path = os.path.join(DATA_DIR, f"{loaded_db}/gen_data")
+        for item in os.listdir(path):
+            if item == "4_data.npy":
+                correct_file_count += 1
+            if item == "8_data.npy":
+                correct_file_count += 1
+            if item == "16_data.npy":
+                correct_file_count += 1
+            if item == "32_data.npy":
+                correct_file_count += 1
+            if item == "64_data.npy":
+                correct_file_count += 1
+            if item == "128_data.npy":
+                correct_file_count += 1
+        if correct_file_count == 6:
+            set_LOADED_DB(loaded_db)
+        else:
+            showerror(title="WARNING Data Needs Compiling",
+                    message=f"The selected database has not been compiled and will not generate images. Select Compile Data then choose a database")
+            self.destroy()
+        pass
 
 def create_db_list():
     db_list = os.listdir(DATA_DIR)

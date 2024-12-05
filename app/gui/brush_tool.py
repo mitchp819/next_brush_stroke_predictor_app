@@ -19,6 +19,8 @@ class BrushTool(tk.Frame):
         self.greyscale_value = tk.IntVar()
         self.greyscale_value.set(0)
 
+        self.drawing_canvas = None
+
         frame_width = 120
         main_frame = tk.Frame(container,
                               width=120,
@@ -39,13 +41,17 @@ class BrushTool(tk.Frame):
                                         font=("TkDefaultFont", 10),
                                         relief='groove',
                                         borderwidth=5 ,
-                                        bg = SECONDARY_COLOR)
+                                        bg = SECONDARY_COLOR,
+                                        command= self.generate_image)
         generate_stroke_btn.pack( pady = 3, padx=3, fill='x')
         
     def get_greyscale_value(self):
         return self.greyscale_value.get()
     def get_brush_size(self):
         return self.brush_size.get()
+    
+    def set_drawing_canvas(self, drawing_canvas):
+        self.drawing_canvas = drawing_canvas
 
     def create_sample_brush_frame(self, container):
         frame = tk.Frame(
@@ -128,4 +134,6 @@ class BrushTool(tk.Frame):
         self.greyscale_value_label.config(text=self.greyscale_value.get())
         self.brush_size_label.config(text= self.brush_size.get())
         pass
-
+    
+    def generate_image(self):
+        self.drawing_canvas.generate_stroke()

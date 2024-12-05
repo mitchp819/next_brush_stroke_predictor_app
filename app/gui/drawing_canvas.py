@@ -12,7 +12,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import greyscale_value_to_hex, shape_img, ROOT_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB
+from app import greyscale_value_to_hex, shape_img, UI_COLOR, ROOT_DIR, ASSETS_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB, get_last_file_by_id
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -31,8 +31,20 @@ class DrawingCanvasFrame(ttk.Frame):
         self.img_generator = ImageProcessor()
         
         #gui
-        self.canvas = tk.Canvas(self, width=self.win_x, height=self.win_y, bg='white')
-        self.canvas.pack()
+        main_frame = tk.Frame(self,
+                              border=3,
+                              relief='raised',
+                              bg=UI_COLOR)
+        main_frame.pack()
+        
+        self.canvas = tk.Canvas(main_frame, 
+                                width=self.win_x, 
+                                height=self.win_y, 
+                                bg='white',
+                                border=2,
+                                relief='groove'
+                                )
+        self.canvas.pack(pady=10,padx=10)
         self.pack(side=tk.LEFT, expand= True)
 
         #numpy arrays for canvas and stroke
@@ -188,17 +200,16 @@ class DrawingCanvasFrame(ttk.Frame):
                     greyscale_hex = greyscale_value_to_hex(pixel_value)
                     self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr, (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
         pass
-        
 
-def get_last_file_id(data_base):
-    dir_path = f'data/{data_base}/image_data'
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-    files_list = [f for f in os.listdir(dir_path)
-                  if os.path.isfile(os.path.join(dir_path, f))]
-    largest_id = 0
-    for file in files_list:
-        integers = [int(s) for s in re.findall(r'\d+', file)]
-        if(integers[0] > largest_id):
-            largest_id = integers[0]
-    return largest_id
+    def save_image(self):
+        saved_img_folder = os.path.join(ASSETS_DIR, "saved-images")
+        larget_id = get_last_file_by_id(saved_img_folder)
+        save_name = f"saved_img{larget_id+1}.png"
+
+        image = Image.fromarray(self.np_main_canvas_data)
+        scaled_image = image.resize((128*6, 128*6), Image.NEAREST)
+        
+        scaled_image.save(os.path.join(saved_img_folder, save_name))
+        self.app_console.print_to_console(f"Image saved to saved-images folder\n under the name {save_name}")
+        pass
+        

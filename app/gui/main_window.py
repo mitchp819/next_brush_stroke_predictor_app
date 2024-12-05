@@ -8,7 +8,7 @@ except ImportError:
     pass
 
 from config_data_window.config_data_main import ConfigDataWindow
-from app import WINDOW_TITLE, UI_COLOR, TRIM_COLOR, BG_COLOR, BrushTool, GenerateTool, HeaderTool, DrawingCanvasFrame, AppConsole
+from app import WINDOW_TITLE, UI_COLOR, TRIM_COLOR, BG_COLOR, InfoPane, BrushTool, GenerateTool, HeaderTool, DrawingCanvasFrame, AppConsole
 
 class MainWindow(tk.Tk):
     def __init__(self):
@@ -42,10 +42,12 @@ class MainWindow(tk.Tk):
         right_frame.pack(side=tk.RIGHT)
 
         brush_tool = BrushTool(inner_frame) 
+        info_pane = InfoPane(right_frame)
         generate_tool = GenerateTool(right_frame)
         app_console = AppConsole(right_frame)
         header_tool = HeaderTool(header_tool_frame)
         drawing_canvas = DrawingCanvasFrame(inner_frame)
+        
         
         header_tool.set_drawing_canvas(drawing_canvas)
         header_tool.set_app_console(app_console)
@@ -54,6 +56,7 @@ class MainWindow(tk.Tk):
         drawing_canvas.set_app_console(app_console)
         drawing_canvas.set_gen_tool(generate_tool)
         generate_tool.set_drawing_canvas(drawing_canvas)
+        brush_tool.set_drawing_canvas(drawing_canvas)
 
         header_tool.toggle_data_gather_mode('auto')
 
