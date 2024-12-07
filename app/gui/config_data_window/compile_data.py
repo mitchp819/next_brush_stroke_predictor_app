@@ -127,8 +127,8 @@ class CompileData(tk.Toplevel):
         main_cat_db =  cat_data(database=db)
         final_db = main_cat_db
         if flip_h:
-            flip_db_h(main_cat_db)
-            #cat with final_db
+            fliped_h = flip_db_h(main_cat_db)
+            final_db = np.concatenate((final_db, fliped_h), axis=0)
         if flip_v:
             flip_db_v(main_cat_db)
             #cat with final_db
