@@ -23,6 +23,8 @@ class ConfigDataWindow(tk.Toplevel):
         self.resizable(True, True)
         self.config(bg=UI_COLOR)
 
+        self.info_pane = None
+
         #Create list of current active databases
         databases = get_all_DATABASES()
         self.current_db_save_list = []
@@ -50,6 +52,10 @@ class ConfigDataWindow(tk.Toplevel):
         self.create_save_to_db_frame(main_frame)
         console = AppConsole(main_frame)
         pass
+
+    def set_info_pane(self, info_pane):
+        self.info_pane = info_pane 
+
 
     def create_header(self, container: tk.Frame):
         header_frame = tk.Frame(container, bg=UI_COLOR)

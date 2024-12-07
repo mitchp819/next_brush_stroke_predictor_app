@@ -26,18 +26,44 @@ class InfoPane(tk.Frame):
                           bg=TRIM_COLOR)
         header.pack(fill='x', pady=(0,3))
 
-        loaded_db_label = tk.Label(main_frame,
+        #scrollbar = tk.Scrollbar(self, orient='vertical', command=main_frame.yview)
+
+        self.loaded_db_label = tk.Label(main_frame,
                                    text="Active Database Generating: ",
                                    justify='left',
                                    bg=UI_COLOR)
-        loaded_db_label.pack(fill='x')
+        self.loaded_db_label.pack(fill='x')
 
         ttk.Separator(main_frame, orient='horizontal').pack(fill='x')
 
-        db_saved_to = tk.Label(main_frame,
+        self.db_saved_to = tk.Label(main_frame,
                                text="Data Being Saved To: ",
                                justify='left',
                                bg= UI_COLOR)
-        db_saved_to.pack(fill='x')
+        self.db_saved_to.pack(fill='x')
+
+        ttk.Separator(main_frame, orient='horizontal').pack(fill='x')
+
+        self.create_info_image_frame(main_frame)
+        
+        pass 
+
+    def set_loaded_db(self, db: str):
+        self.loaded_db_label.config(text= f"Active Database Generating: {db}")
+        pass
+
+    def set_db_saved_to(self, db_list: list):
+        text_out = "Data Being Saved To: "
+        for db in db_list:
+            text_out = text_out + db + ", "
+        self.db_saved_to.config(text=text_out)
+        pass
+
+    def create_info_image_frame(self, container):
+        images_frame = tk.Frame(bg=UI_COLOR)
+
+        lbl128_o = tk.Label(text="")
+        images_frame.pack()
+        pass
         
         

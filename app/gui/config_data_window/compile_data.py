@@ -10,7 +10,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import UI_COLOR, SECONDARY_COLOR, DATA_DIR, HEADER_HEIGHT, TRIM_COLOR, BG_COLOR, downscale_to_all_scales_and_save
+from app import UI_COLOR, SECONDARY_COLOR, DATA_DIR, HEADER_HEIGHT, TRIM_COLOR, BG_COLOR, downscale_to_all_scales_and_save, shape_img
 
 class CompileData(tk.Toplevel):
     def __init__(self):
@@ -161,7 +161,30 @@ def cat_data(database, console =None):
     return result
 
 def flip_db_h(main_np):
-    pass
+    output_list = []
+    for element in main_np:
+        canvas = element[0]
+        stroke = element[1]
+        c_last = canvas[-1]
+        s_last = stroke[-1]
+        canvas = canvas[:-1]
+        stroke = stroke[:-1]
+        shaped_canvas = shape_img(canvas)
+        shaped_stroke = shape_img(stroke)
+        mirror_canvas = np.flip(shaped_canvas, axis = 1)
+        mirror_stroke = np.flip(shaped_stroke, axis = 1)
+        flat_canvas = mirror_canvas.flatten()
+        flat_stroke = mirror_stroke.flatten()
+        final_canvas = np.append(flat_canvas, c_last)
+        final_stroke = np.append(flat_stroke, s_last)
+        new_element = np.array([final_canvas, final_stroke])
+        print(f'New element shape = {new_element.shape}')
+        output_list.append(new_element)
+    
+    output_np = np.concatenate([output_list], axis=0)
+    print("All elements flipped Horizontally")
+    print(output_np.shape)
+    return output_np
 
 def flip_db_v(main_np):
     pass

@@ -17,6 +17,7 @@ class GenerateTool(tk.Frame):
         self.threhold.set(500)
 
         self.drawing_canvas = None
+        self.info_pane = None 
 
 
         main_frame = tk.Frame(container,
@@ -48,6 +49,7 @@ class GenerateTool(tk.Frame):
     
     def get_threshold(self):
         return self.threhold
+    
     def set_drawing_canvas(self, drawing_canvas):
         self.drawing_canvas = drawing_canvas
 

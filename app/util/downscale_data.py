@@ -7,7 +7,7 @@ def downscale_dataset (data_set):
     data_set_size = data_set.shape[0]
     side_length = int(np.sqrt(data_set.shape[2] - 1))
     new_shape = (data_set.shape[0], data_set.shape[1], (side_length//2)**2 + 1)
-    print(new_shape)
+    #print(new_shape)
     downscaled_dataset = np.zeros(new_shape)
     for i in range(data_set_size):
         canvas_img = data_set[i,0,:]
