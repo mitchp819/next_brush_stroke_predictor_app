@@ -195,10 +195,11 @@ class DrawingCanvasFrame(ttk.Frame):
 
         for row, column_array in enumerate(output_stroke):
             for col, pixel_value in enumerate(column_array):
-                pixel_value = int(pixel_value*255)
-                if pixel_value >=0:
-                    greyscale_hex = greyscale_value_to_hex(pixel_value)
+                pxl255 = int(pixel_value*255)
+                if pxl255 >=0:
+                    greyscale_hex = greyscale_value_to_hex(pxl255)
                     self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr, (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
+                    self.np_main_canvas_data[row, col] = pxl255
         pass
 
     def save_image(self):

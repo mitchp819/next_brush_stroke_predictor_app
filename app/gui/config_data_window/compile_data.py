@@ -127,11 +127,11 @@ class CompileData(tk.Toplevel):
         main_cat_db =  cat_data(database=db)
         final_db = main_cat_db
         if flip_h:
-            fliped_h = flip_db_h(main_cat_db)
-            final_db = np.concatenate((final_db, fliped_h), axis=0)
+            flipped_h = flip_db_h(main_cat_db)
+            final_db = np.concatenate((final_db, flipped_h), axis=0)
         if flip_v:
-            flip_db_v(main_cat_db)
-            #cat with final_db
+            flipped_v = flip_db_v(main_cat_db)
+            final_db = np.concatenate((final_db, flipped_v), axis=0)
         if rotate:
             rotate_db(main_cat_db)
             #cat with final_db
@@ -178,7 +178,6 @@ def flip_db_h(main_np):
         final_canvas = np.append(flat_canvas, c_last)
         final_stroke = np.append(flat_stroke, s_last)
         new_element = np.array([final_canvas, final_stroke])
-        print(f'New element shape = {new_element.shape}')
         output_list.append(new_element)
     
     output_np = np.concatenate([output_list], axis=0)
@@ -187,7 +186,70 @@ def flip_db_h(main_np):
     return output_np
 
 def flip_db_v(main_np):
-    pass
+    output_list = []
+    for element in main_np:
+        canvas = element[0]
+        stroke = element[1]
+        c_last = canvas[-1]
+        s_last = stroke[-1]
+        canvas = canvas[:-1]
+        stroke = stroke[:-1]
+        shaped_canvas = shape_img(canvas)
+        shaped_stroke = shape_img(stroke)
+        mirror_canvas = np.flip(shaped_canvas, axis = 0)
+        mirror_stroke = np.flip(shaped_stroke, axis = 0)
+        flat_canvas = mirror_canvas.flatten()
+        flat_stroke = mirror_stroke.flatten()
+        final_canvas = np.append(flat_canvas, c_last)
+        final_stroke = np.append(flat_stroke, s_last)
+        new_element = np.array([final_canvas, final_stroke])
+        output_list.append(new_element)
+    
+    output_np = np.concatenate([output_list], axis=0)
+    print("All elements flipped Vertically")
+    print(output_np.shape)
+    return output_np
 
 def rotate_db(main_np):
+    output_list = []
+    for element in main_np:
+        canvas = element[0]
+        stroke = element[1]
+        c_last = canvas[-1]
+        s_last = stroke[-1]
+        canvas = canvas[:-1]
+        stroke = stroke[:-1]
+        shaped_canvas = shape_img(canvas)
+        shaped_stroke = shape_img(stroke)
+
+        r1_canvas = np.rot90(shaped_canvas)
+        r1_stroke = np.rot90(shaped_stroke)
+        r2_canvas = np.rot90(r1_canvas)
+        r2_stroke = np.rot90(r1_stroke)
+        r3_canvas = np.rot90(r2_canvas)
+        r3_stroke = np.rot90(r2_stroke)
+
+        flat1_canvas = r1_canvas.flatten()
+        flat1_stroke = r1_stroke.flatten()
+        flat2_canvas = r2_canvas.flatten()
+        flat2_stroke = r2_stroke.flatten()
+        flat3_canvas = r3_canvas.flatten()
+        flat3_stroke = r3_stroke.flatten()
+
+        final1_canvas = np.append(flat1_canvas, c_last)
+        final1_stroke = np.append(flat1_stroke, s_last)
+        new_element1 = np.array([final1_canvas, final1_stroke])
+        output_list.append(new_element1)
+        final2_canvas = np.append(flat2_canvas, c_last)
+        final2_stroke = np.append(flat2_stroke, s_last)
+        new_element2 = np.array([final2_canvas, final2_stroke])
+        output_list.append(new_element2)
+        final3_canvas = np.append(flat3_canvas, c_last)
+        final3_stroke = np.append(flat3_stroke, s_last)
+        new_element3 = np.array([final3_canvas, final3_stroke])
+        output_list.append(new_element3)
+    
+    output_np = np.concatenate([output_list], axis=0)
+    print("All elements rotated")
+    print(output_np.shape)
     pass
