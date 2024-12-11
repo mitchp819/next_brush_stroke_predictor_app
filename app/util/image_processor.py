@@ -151,18 +151,18 @@ class ImageProcessor:
 
         sim_img_assets_path = os.path.join(ASSETS_DIR, "similar-images")
 
-        canvas_np_img_to_png(self.dataset_128[output_index,0,:], "similar_img.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset_128[output_index,0,:], "similar128.png", sim_img_assets_path)
         canvas_np_img_to_png(self.dataset_128[output_index,1,:], "similar_stroke.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_4[output_index,0,:], "similar_4x4_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds5, "input_4x4_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_8[output_index,0,:], "similar_8x8_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds4, "input_8x8_img.png",sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_16[output_index,0,:], "similar_16x16_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds3, "input_16x16_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_32[output_index,0,:], "similar_32x32_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds2, "input_32x32_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_64[output_index,0,:], "similar_64x64_img.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds1, "input_64x64_img.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset_4[output_index,0,:], "similar4.png", sim_img_assets_path)
+        canvas_np_img_to_png(input_img_ds5, "input4.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset_8[output_index,0,:], "similar8.png", sim_img_assets_path)
+        canvas_np_img_to_png(input_img_ds4, "input8.png",sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset_16[output_index,0,:], "similar16.png", sim_img_assets_path)
+        canvas_np_img_to_png(input_img_ds3, "input16.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset_32[output_index,0,:], "similar32.png", sim_img_assets_path)
+        canvas_np_img_to_png(input_img_ds2, "input32.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset_64[output_index,0,:], "similar64.png", sim_img_assets_path)
+        canvas_np_img_to_png(input_img_ds1, "input64.png", sim_img_assets_path)
         return self.dataset_128[output_index, 1, :]
 
 

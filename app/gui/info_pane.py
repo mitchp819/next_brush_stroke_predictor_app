@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import PhotoImage
+import os
+from PIL import Image
 try:
     from ctypes import windll
     windll.shcore.SetProcessDpiAwareness(1)
@@ -7,7 +10,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT
+from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT, ASSETS_DIR
 
 class InfoPane(tk.Frame):
     def __init__(self, container):
@@ -60,10 +63,60 @@ class InfoPane(tk.Frame):
         pass
 
     def create_info_image_frame(self, container):
-        images_frame = tk.Frame(bg=UI_COLOR)
+        images_frame = tk.Frame(container, bg=UI_COLOR)
+        images_frame.pack(fill='x')
+        images_frame.columnconfigure(0, weight=1)
+        images_frame.columnconfigure(1, weight=1)
 
-        lbl128_o = tk.Label(text="")
-        images_frame.pack()
+        input_img_lbl = tk.Label( images_frame,text = "Input Image")
+        input_img_lbl.grid(column=0, row=0, sticky= tk.N)
+        similar_img_lbl = tk.Label(images_frame, text="Similar Image ")
+        similar_img_lbl.grid(column=1, row=0, sticky= tk.N)
+
+        folder_path = os.path.join(ASSETS_DIR, "similar-images")
+
+        input128img = tk.PhotoImage(file = os.path.join(folder_path, "input_canvas.png"))
+        lbl_i128 = tk.Label(images_frame, image=input128img).grid(column=0, row=1, sticky = tk.N, pady=2)
+        input64img = tk.PhotoImage(file = os.path.join(folder_path, "input64.png"))
+        lbl_i64 = tk.Label(images_frame, image=input64img).grid(column=0, row=2, sticky = tk.N, pady=2)
+        input32img = tk.PhotoImage(file = os.path.join(folder_path, "input32.png"))
+        lbl_i32 = tk.Label(images_frame, image=input32img).grid(column=0, row=3, sticky = tk.N, pady=2)
+        input16img = tk.PhotoImage(file = os.path.join(folder_path, "input16.png"))
+        lbl_i16 = tk.Label(images_frame, image=input16img).grid(column=0, row=4, sticky = tk.N, pady=2)
+        input8img = tk.PhotoImage(file = os.path.join(folder_path, "input8.png"))
+        lbl_i8 = tk.Label(images_frame, image=input8img).grid(column=0, row=5, sticky = tk.N, pady=2)
+        input4img = tk.PhotoImage(file = os.path.join(folder_path, "input4.png"))
+        lbl_i4 = tk.Label(images_frame, image=input4img).grid(column=0, row=6, sticky = tk.N, pady=2)
+
+        similar128img = tk.PhotoImage(file = os.path.join(folder_path, "similar128.png"))
+        lbl_s128 = tk.Label(images_frame, image=similar128img)
+        lbl_s128.image = similar128img
+        lbl_s128.grid(column=1, row=1, sticky = tk.N, pady=2)
+
+        similar64img = tk.PhotoImage(file = os.path.join(folder_path, "similar64.png"))
+        lbl_s64 = tk.Label(images_frame, image=similar64img)
+        lbl_s64.image =similar64img
+        lbl_s64.grid(column=1, row=2, sticky = tk.N, pady=2)
+
+        similar32img = tk.PhotoImage(file = os.path.join(folder_path, "similar32.png"))
+        lbl_s32 = tk.Label(images_frame, image=similar32img)
+        lbl_s32.image = similar32img
+        lbl_s32.grid(column=1, row=3, sticky = tk.N, pady=2)
+
+        similar16img = tk.PhotoImage(file = os.path.join(folder_path, "similar16.png"))
+        lbl_s16 = tk.Label(images_frame, image=similar16img)
+        lbl_s16.image = similar16img
+        lbl_s16.grid(column=1, row=4, sticky = tk.N, pady=2)
+
+        similar8img = tk.PhotoImage(file = os.path.join(folder_path, "similar8.png"))
+        lbl_s8 = tk.Label(images_frame, image=similar8img)
+        lbl_s8.image = similar8img
+        lbl_s8.grid(column=1, row=5, sticky = tk.N, pady=2)
+
+        similar4img = tk.PhotoImage(file = os.path.join(folder_path, "similar4.png"))
+        lbl_s4 = tk.Label(images_frame, image=similar4img)
+        lbl_s4.image = similar4img
+        lbl_s4.grid(column=1, row=6, sticky = tk.N, pady=2)
         pass
         
         

@@ -21,7 +21,7 @@ class MainWindow(tk.Tk):
         self.resizable(True, True)
         self.config(bg=UI_COLOR)
 
-        self.config_menu()  
+        #self.config_menu()  
 
         #for testing delete after
         #ConfigDataWindow()
