@@ -32,13 +32,7 @@ def set_LOADED_DB(input: str):
 def get_LOADED_DB() -> str:
     return LOADED_DB
 
-SAVE_TO_DB_LIST = [db_list[0]]
-def set_SAVE_TO_DB_LIST(input: list):
-    global SAVE_TO_DB_LIST
-    SAVE_TO_DB_LIST = input
-    print(f"SAVE_TO_DB_LIST set to {input}")
-def get_SAVE_TO_DB_LIST() -> list:
-    return SAVE_TO_DB_LIST
+
 
 DATABASES = {}
 def set_DATABASES(database:str, save_to = None, dataset_count = None):

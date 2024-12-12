@@ -201,6 +201,7 @@ class ConfigDataWindow(tk.Toplevel):
                 set_DATABASES(database=saved_db ,dataset_count=largest_id+1)   
         
         print(get_all_DATABASES())
+        self.info_pane.set_db_save_to_lbl()
         pass
 
     def on_loaded_db_change(self, loaded_db):
@@ -221,6 +222,7 @@ class ConfigDataWindow(tk.Toplevel):
                 correct_file_count += 1
         if correct_file_count == 6:
             set_LOADED_DB(loaded_db)
+            self.info_pane.set_db_generating_lbl()
         else:
             showerror(title="WARNING Data Needs Compiling",
                     message=f"The selected database has not been compiled and will not generate images. Select Compile Data then choose a database")

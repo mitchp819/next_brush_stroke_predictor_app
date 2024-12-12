@@ -54,6 +54,8 @@ class HeaderTool(tk.Frame):
         self.drawing_canvas = drawing_canvas
     def set_app_console(self, app_console):
         self.app_console = app_console
+    def set_info_pane(self, info_pane):
+        self.info_pane = info_pane
 
     def create_data_gather_tool(self, container):
         d_g_frame = tk.Frame(container, bg=UI_COLOR)
@@ -120,7 +122,8 @@ class HeaderTool(tk.Frame):
         pass
 
     def open_config_data(self):
-        ConfigDataWindow()
+        config_window = ConfigDataWindow()
+        config_window.set_info_pane(self.info_pane)
         pass
 
     def save_to_dataset(self):

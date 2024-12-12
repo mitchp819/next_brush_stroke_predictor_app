@@ -51,6 +51,7 @@ class MainWindow(tk.Tk):
         
         header_tool.set_drawing_canvas(drawing_canvas)
         header_tool.set_app_console(app_console)
+        header_tool.set_info_pane(info_pane)
         drawing_canvas.set_brush_tool(brush_tool)
         drawing_canvas.set_data_gather_tool(header_tool)
         drawing_canvas.set_app_console(app_console)

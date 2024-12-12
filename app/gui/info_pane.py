@@ -10,11 +10,12 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT, RIGHT_PANE_WIDTH, ASSETS_DIR
+from app import UI_COLOR,  TRIM_COLOR, HEADER_HEIGHT, RIGHT_PANE_WIDTH, ASSETS_DIR, get_LOADED_DB, get_all_DATABASES
 
 class InfoPane(tk.Frame):
     def __init__(self, container):
         super().__init__(container)
+        self.images_frame = None
 
         main_frame = tk.Frame(container,
                               width=RIGHT_PANE_WIDTH,
@@ -46,13 +47,15 @@ class InfoPane(tk.Frame):
         self.db_saved_to = tk.Label(self.scroll_frame,
                                text="Data Being Saved To: ",
                                justify='left',
-                               bg= UI_COLOR)
+                               bg= UI_COLOR,
+                               wraplength=RIGHT_PANE_WIDTH -30)
         self.db_saved_to.pack(fill='x')
 
         ttk.Separator(self.scroll_frame, orient='horizontal').pack(fill='x')
 
-        self.create_info_image_frame(self.scroll_frame)
-        
+        #self.create_info_image_frame(self.scroll_frame)
+        self.set_db_generating_lbl()
+        self.set_db_save_to_lbl()
         pass 
 
     def set_loaded_db(self, db: str):
@@ -62,19 +65,30 @@ class InfoPane(tk.Frame):
     def set_db_saved_to(self, db_list: list):
         text_out = "Data Being Saved To: "
         for db in db_list:
-            text_out = text_out + db + ", "
+            text_out = text_out +", " + db
         self.db_saved_to.config(text=text_out)
+        print("set db save to")
         pass
 
     def set_image_frame(self):
-        self.images_frame.destroy()
+        if self.images_frame != None:
+            self.images_frame.destroy()
         self.create_info_image_frame(self.scroll_frame)
         pass
 
     def set_db_generating_lbl(self):
+        gen_db = get_LOADED_DB()
+        self.loaded_db_label.config(text=f"Active Database Generating: {gen_db}")
         pass
 
     def set_db_save_to_lbl(self):
+        
+        databases = get_all_DATABASES()
+        lbl_text = "Data Being Saved To:"
+        for db, value in databases.items():
+            if value[0] == 1:
+                lbl_text = lbl_text + " ," + db 
+        self.db_saved_to.config(text=lbl_text)
         pass
 
     def on_configure(self, event):
