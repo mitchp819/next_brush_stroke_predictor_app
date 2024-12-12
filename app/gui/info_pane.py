@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import PhotoImage
 import os
-from PIL import Image
+from PIL import Image, ImageTk
 try:
     from ctypes import windll
     windll.shcore.SetProcessDpiAwareness(1)
@@ -29,25 +29,29 @@ class InfoPane(tk.Frame):
                           bg=TRIM_COLOR)
         header.pack(fill='x', pady=(0,3))
 
-        #scrollbar = tk.Scrollbar(self, orient='vertical', command=main_frame.yview)
+        scroll_frame = self.create_scrollbar(main_frame)
 
-        self.loaded_db_label = tk.Label(main_frame,
+        w = tk.Canvas(scroll_frame, width=380, height=1, bg=UI_COLOR)
+        w.pack()
+
+        self.loaded_db_label = tk.Label(scroll_frame,
                                    text="Active Database Generating: ",
                                    justify='left',
-                                   bg=UI_COLOR)
+                                   bg=UI_COLOR
+                                   )
         self.loaded_db_label.pack(fill='x')
 
-        ttk.Separator(main_frame, orient='horizontal').pack(fill='x')
+        ttk.Separator(scroll_frame, orient='horizontal').pack(fill='x')
 
-        self.db_saved_to = tk.Label(main_frame,
+        self.db_saved_to = tk.Label(scroll_frame,
                                text="Data Being Saved To: ",
                                justify='left',
                                bg= UI_COLOR)
         self.db_saved_to.pack(fill='x')
 
-        ttk.Separator(main_frame, orient='horizontal').pack(fill='x')
+        ttk.Separator(scroll_frame, orient='horizontal').pack(fill='x')
 
-        self.create_info_image_frame(main_frame)
+        self.create_info_image_frame(scroll_frame)
         
         pass 
 
@@ -60,6 +64,32 @@ class InfoPane(tk.Frame):
         for db in db_list:
             text_out = text_out + db + ", "
         self.db_saved_to.config(text=text_out)
+        pass
+
+    def on_configure(self, event):
+        self.scroll_canvas.configure(scrollregion=self.scroll_canvas.bbox("all"))
+        self.scroll_canvas.itemconfig("window", width = event.width)
+
+    def create_scrollbar(self, container):
+        self.scroll_canvas = tk.Canvas(container, width=350, height=300, bg= UI_COLOR)
+        scrollbar = ttk.Scrollbar(container, orient='vertical', command=self.scroll_canvas.yview)
+        scrollbar.pack(side="right", fill='y')
+        self.scroll_canvas.pack(side='left', fill='both', expand=True)
+        self.scroll_canvas.configure(yscrollcommand=scrollbar.set)
+        scrollable_frame = ttk.Frame(self.scroll_canvas)
+        self.scroll_canvas.create_window((0,0), window=scrollable_frame, anchor="nw")
+        scrollable_frame.bind("<Configure>", self.on_configure)
+        return scrollable_frame
+
+    def load_image(self, grid_container: tk.Frame, row:int, column:int, scale: int, file_name: str):
+        folder_path = os.path.join(ASSETS_DIR, "similar-images")
+        pil_img = Image.open(os.path.join(folder_path, file_name))
+        width, height = pil_img.size
+        scaled_img = pil_img.resize((int(width*scale * 1.5), int(height*scale *1.5)), Image.NEAREST)
+        tk_img = ImageTk.PhotoImage(scaled_img)
+        img_lbl = tk.Label(grid_container, image=tk_img)
+        img_lbl.image = tk_img
+        img_lbl.grid(column=column, row=row, pady = 3, padx =3)
         pass
 
     def create_info_image_frame(self, container):
@@ -75,48 +105,25 @@ class InfoPane(tk.Frame):
 
         folder_path = os.path.join(ASSETS_DIR, "similar-images")
 
-        input128img = tk.PhotoImage(file = os.path.join(folder_path, "input_canvas.png"))
-        lbl_i128 = tk.Label(images_frame, image=input128img).grid(column=0, row=1, sticky = tk.N, pady=2)
-        input64img = tk.PhotoImage(file = os.path.join(folder_path, "input64.png"))
-        lbl_i64 = tk.Label(images_frame, image=input64img).grid(column=0, row=2, sticky = tk.N, pady=2)
-        input32img = tk.PhotoImage(file = os.path.join(folder_path, "input32.png"))
-        lbl_i32 = tk.Label(images_frame, image=input32img).grid(column=0, row=3, sticky = tk.N, pady=2)
-        input16img = tk.PhotoImage(file = os.path.join(folder_path, "input16.png"))
-        lbl_i16 = tk.Label(images_frame, image=input16img).grid(column=0, row=4, sticky = tk.N, pady=2)
-        input8img = tk.PhotoImage(file = os.path.join(folder_path, "input8.png"))
-        lbl_i8 = tk.Label(images_frame, image=input8img).grid(column=0, row=5, sticky = tk.N, pady=2)
-        input4img = tk.PhotoImage(file = os.path.join(folder_path, "input4.png"))
-        lbl_i4 = tk.Label(images_frame, image=input4img).grid(column=0, row=6, sticky = tk.N, pady=2)
+        self.load_image(grid_container= images_frame, row=1, column=0, scale=1, file_name="input_canvas.png")
+        self.load_image(grid_container= images_frame, row=2, column=0, scale=2, file_name="input64.png")
+        self.load_image(grid_container= images_frame, row=3, column=0, scale=4, file_name="input32.png")
+        self.load_image(grid_container= images_frame, row=4, column=0, scale=8, file_name="input16.png")
+        self.load_image(grid_container= images_frame, row=5, column=0, scale=16, file_name="input8.png")
+        self.load_image(grid_container= images_frame, row=6, column=0, scale=32, file_name="input4.png")
 
-        similar128img = tk.PhotoImage(file = os.path.join(folder_path, "similar128.png"))
-        lbl_s128 = tk.Label(images_frame, image=similar128img)
-        lbl_s128.image = similar128img
-        lbl_s128.grid(column=1, row=1, sticky = tk.N, pady=2)
 
-        similar64img = tk.PhotoImage(file = os.path.join(folder_path, "similar64.png"))
-        lbl_s64 = tk.Label(images_frame, image=similar64img)
-        lbl_s64.image =similar64img
-        lbl_s64.grid(column=1, row=2, sticky = tk.N, pady=2)
 
-        similar32img = tk.PhotoImage(file = os.path.join(folder_path, "similar32.png"))
-        lbl_s32 = tk.Label(images_frame, image=similar32img)
-        lbl_s32.image = similar32img
-        lbl_s32.grid(column=1, row=3, sticky = tk.N, pady=2)
+        self.load_image(grid_container= images_frame, row=1, column=1, scale=1, file_name="similar128.png")
+        self.load_image(grid_container= images_frame, row=2, column=1, scale=2, file_name="similar64.png")
+        self.load_image(grid_container= images_frame, row=3, column=1, scale=4, file_name="similar32.png")
+        self.load_image(grid_container= images_frame, row=4, column=1, scale=8, file_name="similar16.png")
+        self.load_image(grid_container= images_frame, row=5, column=1, scale=16, file_name="similar8.png")
+        self.load_image(grid_container= images_frame, row=6, column=1, scale=32, file_name="similar4.png")
 
-        similar16img = tk.PhotoImage(file = os.path.join(folder_path, "similar16.png"))
-        lbl_s16 = tk.Label(images_frame, image=similar16img)
-        lbl_s16.image = similar16img
-        lbl_s16.grid(column=1, row=4, sticky = tk.N, pady=2)
 
-        similar8img = tk.PhotoImage(file = os.path.join(folder_path, "similar8.png"))
-        lbl_s8 = tk.Label(images_frame, image=similar8img)
-        lbl_s8.image = similar8img
-        lbl_s8.grid(column=1, row=5, sticky = tk.N, pady=2)
 
-        similar4img = tk.PhotoImage(file = os.path.join(folder_path, "similar4.png"))
-        lbl_s4 = tk.Label(images_frame, image=similar4img)
-        lbl_s4.image = similar4img
-        lbl_s4.grid(column=1, row=6, sticky = tk.N, pady=2)
+      
         pass
         
         
