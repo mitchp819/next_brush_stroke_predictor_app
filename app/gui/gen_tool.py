@@ -7,7 +7,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT
+from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT, RIGHT_PANE_WIDTH
   
 
 class GenerateTool(tk.Frame):
@@ -21,14 +21,14 @@ class GenerateTool(tk.Frame):
 
 
         main_frame = tk.Frame(container,
-                              width=400,
+                              width= RIGHT_PANE_WIDTH,
                               height=300,
                               bg = UI_COLOR,
                               border=4,
                               relief='raised')
         main_frame.pack(padx=10, pady=5)
         header =tk.Canvas(main_frame,
-                          width=400 ,
+                          width= RIGHT_PANE_WIDTH,
                           height=HEADER_HEIGHT,
                           bg=TRIM_COLOR)
         header.pack(fill='x', pady=(0,3))

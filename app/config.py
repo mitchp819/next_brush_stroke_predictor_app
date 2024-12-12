@@ -19,6 +19,7 @@ ASSETS_DIR = os.path.abspath(os.path.join(ROOT_DIR, "assets"))
 
 #numbers
 HEADER_HEIGHT = 20
+RIGHT_PANE_WIDTH = 450
 
 #data stuff
 db_list = os.listdir(DATA_DIR)

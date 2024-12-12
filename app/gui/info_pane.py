@@ -10,48 +10,48 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT, ASSETS_DIR
+from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT, RIGHT_PANE_WIDTH, ASSETS_DIR
 
 class InfoPane(tk.Frame):
     def __init__(self, container):
         super().__init__(container)
 
         main_frame = tk.Frame(container,
-                              width=400,
+                              width=RIGHT_PANE_WIDTH,
                               height=300,
                               bg = UI_COLOR,
                               border=4,
                               relief='raised')
         main_frame.pack(padx=10, pady=5)
         header =tk.Canvas(main_frame,
-                          width=400 ,
+                          width= RIGHT_PANE_WIDTH ,
                           height=HEADER_HEIGHT,
                           bg=TRIM_COLOR)
         header.pack(fill='x', pady=(0,3))
 
-        scroll_frame = self.create_scrollbar(main_frame)
+        self.scroll_frame = self.create_scrollbar(main_frame)
 
-        w = tk.Canvas(scroll_frame, width=380, height=1, bg=UI_COLOR)
+        w = tk.Canvas(self.scroll_frame, width=RIGHT_PANE_WIDTH-30, height=1, bg=UI_COLOR)
         w.pack()
 
-        self.loaded_db_label = tk.Label(scroll_frame,
+        self.loaded_db_label = tk.Label(self.scroll_frame,
                                    text="Active Database Generating: ",
                                    justify='left',
                                    bg=UI_COLOR
                                    )
         self.loaded_db_label.pack(fill='x')
 
-        ttk.Separator(scroll_frame, orient='horizontal').pack(fill='x')
+        ttk.Separator(self.scroll_frame, orient='horizontal').pack(fill='x')
 
-        self.db_saved_to = tk.Label(scroll_frame,
+        self.db_saved_to = tk.Label(self.scroll_frame,
                                text="Data Being Saved To: ",
                                justify='left',
                                bg= UI_COLOR)
         self.db_saved_to.pack(fill='x')
 
-        ttk.Separator(scroll_frame, orient='horizontal').pack(fill='x')
+        ttk.Separator(self.scroll_frame, orient='horizontal').pack(fill='x')
 
-        self.create_info_image_frame(scroll_frame)
+        self.create_info_image_frame(self.scroll_frame)
         
         pass 
 
@@ -66,12 +66,23 @@ class InfoPane(tk.Frame):
         self.db_saved_to.config(text=text_out)
         pass
 
+    def set_image_frame(self):
+        self.images_frame.destroy()
+        self.create_info_image_frame(self.scroll_frame)
+        pass
+
+    def set_db_generating_lbl(self):
+        pass
+
+    def set_db_save_to_lbl(self):
+        pass
+
     def on_configure(self, event):
         self.scroll_canvas.configure(scrollregion=self.scroll_canvas.bbox("all"))
         self.scroll_canvas.itemconfig("window", width = event.width)
 
     def create_scrollbar(self, container):
-        self.scroll_canvas = tk.Canvas(container, width=350, height=300, bg= UI_COLOR)
+        self.scroll_canvas = tk.Canvas(container, width=RIGHT_PANE_WIDTH -30, height=330, bg= UI_COLOR)
         scrollbar = ttk.Scrollbar(container, orient='vertical', command=self.scroll_canvas.yview)
         scrollbar.pack(side="right", fill='y')
         self.scroll_canvas.pack(side='left', fill='both', expand=True)
@@ -93,37 +104,33 @@ class InfoPane(tk.Frame):
         pass
 
     def create_info_image_frame(self, container):
-        images_frame = tk.Frame(container, bg=UI_COLOR)
-        images_frame.pack(fill='x')
-        images_frame.columnconfigure(0, weight=1)
-        images_frame.columnconfigure(1, weight=1)
+        self.images_frame = tk.Frame(container, bg=UI_COLOR)
+        self.images_frame.pack(fill='x')
+        self.images_frame.columnconfigure(0, weight=1)
+        self.images_frame.columnconfigure(1, weight=1)
 
-        input_img_lbl = tk.Label( images_frame,text = "Input Image")
+        input_img_lbl = tk.Label( self.images_frame,text = "Input Image", bg=UI_COLOR)
         input_img_lbl.grid(column=0, row=0, sticky= tk.N)
-        similar_img_lbl = tk.Label(images_frame, text="Similar Image ")
+        similar_img_lbl = tk.Label(self.images_frame, text="Similar Image", bg=UI_COLOR)
         similar_img_lbl.grid(column=1, row=0, sticky= tk.N)
 
         folder_path = os.path.join(ASSETS_DIR, "similar-images")
 
-        self.load_image(grid_container= images_frame, row=1, column=0, scale=1, file_name="input_canvas.png")
-        self.load_image(grid_container= images_frame, row=2, column=0, scale=2, file_name="input64.png")
-        self.load_image(grid_container= images_frame, row=3, column=0, scale=4, file_name="input32.png")
-        self.load_image(grid_container= images_frame, row=4, column=0, scale=8, file_name="input16.png")
-        self.load_image(grid_container= images_frame, row=5, column=0, scale=16, file_name="input8.png")
-        self.load_image(grid_container= images_frame, row=6, column=0, scale=32, file_name="input4.png")
+        self.load_image(grid_container= self.images_frame, row=1, column=0, scale=1, file_name="input_canvas.png")
+        self.load_image(grid_container= self.images_frame, row=2, column=0, scale=2, file_name="input64.png")
+        self.load_image(grid_container= self.images_frame, row=3, column=0, scale=4, file_name="input32.png")
+        self.load_image(grid_container= self.images_frame, row=4, column=0, scale=8, file_name="input16.png")
+        self.load_image(grid_container= self.images_frame, row=5, column=0, scale=16, file_name="input8.png")
+        self.load_image(grid_container= self.images_frame, row=6, column=0, scale=32, file_name="input4.png")
 
 
 
-        self.load_image(grid_container= images_frame, row=1, column=1, scale=1, file_name="similar128.png")
-        self.load_image(grid_container= images_frame, row=2, column=1, scale=2, file_name="similar64.png")
-        self.load_image(grid_container= images_frame, row=3, column=1, scale=4, file_name="similar32.png")
-        self.load_image(grid_container= images_frame, row=4, column=1, scale=8, file_name="similar16.png")
-        self.load_image(grid_container= images_frame, row=5, column=1, scale=16, file_name="similar8.png")
-        self.load_image(grid_container= images_frame, row=6, column=1, scale=32, file_name="similar4.png")
-
-
-
-      
+        self.load_image(grid_container= self.images_frame, row=1, column=1, scale=1, file_name="similar128.png")
+        self.load_image(grid_container= self.images_frame, row=2, column=1, scale=2, file_name="similar64.png")
+        self.load_image(grid_container= self.images_frame, row=3, column=1, scale=4, file_name="similar32.png")
+        self.load_image(grid_container= self.images_frame, row=4, column=1, scale=8, file_name="similar16.png")
+        self.load_image(grid_container= self.images_frame, row=5, column=1, scale=16, file_name="similar8.png")
+        self.load_image(grid_container= self.images_frame, row=6, column=1, scale=32, file_name="similar4.png")
         pass
         
         

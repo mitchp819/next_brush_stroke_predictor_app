@@ -27,6 +27,7 @@ class DrawingCanvasFrame(ttk.Frame):
         self.data_gather_tool = None
         self.app_console = None
         self.gen_tool = None
+        self.info_pane = None
 
         self.img_generator = ImageProcessor()
         
@@ -68,6 +69,8 @@ class DrawingCanvasFrame(ttk.Frame):
         self.app_console = app_console
     def set_gen_tool(self, gen_tool):
         self.gen_tool = gen_tool
+    def set_info_pane(self, info_pane):
+        self.info_pane = info_pane
     
     def on_mouse_down(self, event):
         if  self.data_gather_tool.get_data_gather_mode() == 'auto':
@@ -200,6 +203,8 @@ class DrawingCanvasFrame(ttk.Frame):
                     greyscale_hex = greyscale_value_to_hex(pxl255)
                     self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr, (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
                     self.np_main_canvas_data[row, col] = pxl255
+        
+        self.info_pane.set_image_frame()
         pass
 
     def save_image(self):
