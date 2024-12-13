@@ -63,22 +63,22 @@ class ImageProcessor:
         #Enumerate each downscaled depth 
         #4x4 
         temp_index_list.clear()
-        index_list = self.compare_input_to_dataset(index_list, self.dataset4, input4, True, self.tolerance_dict['threshold4'] * .0001 - .0001)
+        index_list = self.compare_input_to_dataset(index_list, self.dataset4, input4, True, self.tolerance_dict['threshold4'])
         #8x8
         temp_index_list.clear()
-        index_list = self.compare_input_to_dataset(index_list, self.dataset8, input8, False, self.tolerance_dict['threshold8'] * .0001 - .0001)
+        index_list = self.compare_input_to_dataset(index_list, self.dataset8, input8, False, self.tolerance_dict['threshold8'])
         #16x16
         temp_index_list.clear()
-        index_list = self.compare_input_to_dataset(index_list, self.dataset16, input16, False, self.tolerance_dict['threshold16'] * .0001 - .0001)
+        index_list = self.compare_input_to_dataset(index_list, self.dataset16, input16, False, self.tolerance_dict['threshold16'])
         #32x32
         temp_index_list.clear()
-        index_list = self.compare_input_to_dataset(index_list, self.dataset32, input32, False, self.tolerance_dict['threshold32'] * .0001 - .0001)
+        index_list = self.compare_input_to_dataset(index_list, self.dataset32, input32, False, self.tolerance_dict['threshold32'])
         #64x64
         temp_index_list.clear()
-        index_list = self.compare_input_to_dataset(index_list, self.dataset64, input64, False, self.tolerance_dict['threshold64'] * .0001 - .0001)
-        #64x64
+        index_list = self.compare_input_to_dataset(index_list, self.dataset64, input64, False, self.tolerance_dict['threshold64'])
+        #128x128
         temp_index_list.clear()
-        index_list = self.compare_input_to_dataset(index_list, self.dataset128, input_image, False, self.tolerance_dict['threshold128'] * .0001 - .0001)
+        index_list = self.compare_input_to_dataset(index_list, self.dataset128, input_image, False, self.tolerance_dict['threshold128'])
 
         print(f"\n\nFinal Input List Size = {len(index_list)}. ")
         #output_index = self.best_image_index
@@ -107,11 +107,11 @@ class ImageProcessor:
 
 
 
-    def compare_input_to_dataset(self, index_list, dataset, input_img, first_run, tolerance):
+    def compare_input_to_dataset(self, index_list: list, dataset: np.array, input_img: np.array, first_run: bool, tolerance: int):
         lowest_variance = 1000000.0
         best_index = 0
         temp_index_list = []
-        t = tolerance
+        t = tolerance* .0001 - .0001
         for index, v in index_list:
             skip_data = False
             if first_run:

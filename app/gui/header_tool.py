@@ -1,4 +1,8 @@
 import tkinter as tk
+from tkinter import filedialog as fd
+from tkinter.messagebox import askokcancel, showinfo, WARNING
+from PIL import Image
+import numpy as np
 from enum import Enum
 try:
     from ctypes import windll
@@ -44,6 +48,14 @@ class HeaderTool(tk.Frame):
                                      command= self.open_config_data,
                                      font=("TkDefaultFont", 10))
         open_config_data_btn.pack(side=tk.RIGHT, padx=10)
+        load_img_btn = tk.Button(main_frame,
+                                 text="Load Image",
+                                 bg = SECONDARY_COLOR,
+                                 relief='groove',
+                                 border=3,
+                                 command= self.load_image,
+                                 font=("TkDefaultFont", 10))
+        load_img_btn.pack(side=tk.RIGHT, padx=10)
         self.create_data_gather_tool(main_frame)
 
 
@@ -145,4 +157,34 @@ class HeaderTool(tk.Frame):
 
     def save_image(self):
         self.drawing_canvas.save_image()
+        pass
+
+    def load_image(self):
+        filetypes = (
+            ('png files', '*.png'),
+            ('All files', '*.*')
+        )
+        image_file_path = fd.askopenfilename(title= "Load 128x128 png to canvas",
+                                             filetypes=filetypes)
+        image = Image.open(image_file_path).convert('L')
+        image_array = np.array(image)
+        print(image_array.shape)
+        if image_array.shape[0] != 128 or image_array.shape[1] != 128:
+            if image_array.shape[0] == image_array.shape[1]:
+                answer = askokcancel(title="WARNING Image will be scaled to 128x128",
+                                    message = f"WARNING: The selected image of size {image_array.shape[0]}x{image_array.shape[1]} will be loaded as a 128x128 black and white image. Select Ok to proceed"
+                                    )
+            else:
+                answer = askokcancel(title="WARNING Image is not square",
+                                    message = f"WARNING: The selected image of size {image_array.shape[0]}x{image_array.shape[1]} will be loaded as a 128x128 black and white image. Proceeding will stretch and shrink image to become compatable. Consider croping the image into a square",
+                                    icon =WARNING)
+                if answer == 1:
+                    answer = askokcancel(title="Confirm warp image",
+                                    message = f"Are you sure you want to warp the selected {image_array.shape[0]}x{image_array.shape[1]} into a 128x128 black and white image?",
+                                    icon =WARNING)
+            if answer == 0:
+                return
+            new_image= image.resize((128, 128), Image.NEAREST)
+            image_array = np.array(new_image)
+        self.drawing_canvas.load_img_to_canvas(image_array)
         pass

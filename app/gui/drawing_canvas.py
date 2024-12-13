@@ -221,3 +221,10 @@ class DrawingCanvasFrame(ttk.Frame):
         self.app_console.print_to_console(f"Image saved to saved-images folder\n under the name {save_name}")
         pass
         
+    def load_img_to_canvas(self, image: np.array):
+        for row, column_array in enumerate(image):
+            for col, pixel_value in enumerate(column_array):  
+                greyscale_hex = greyscale_value_to_hex(pixel_value)
+                self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr, (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
+                self.np_main_canvas_data[row, col] = pixel_value
+        pass
