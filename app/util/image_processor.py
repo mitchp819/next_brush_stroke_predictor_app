@@ -7,52 +7,7 @@ import os
 from app import canvas_np_img_to_png, downscale_img, ASSETS_DIR
 
 class ImageProcessor:
-    def __init__(self, data_set_128_file: str = None, data_set_64_file: str = None, data_set_32_file: str = None,
-                  data_set_16_file: str = None, data_set_8_file: str= None, data_set_4_file: str = None, input_data = None):
-        
-        self.downscaled_data  = []
-        if data_set_128_file != None:
-            self.dataset128 = np.load(data_set_128_file)
-            self.downscaled_data.append(self.dataset128)
-            self.max_index = self.dataset128.shape[0]
-            print(f"Data Set of shape {self.dataset128.shape} Loaded")
-
-        if data_set_64_file != None:
-            self.dataset64 = np.load(data_set_64_file)
-            self.downscaled_data.append(self.dataset64)
-            self.dataset_error_check(self.dataset128, self.dataset64)
-        else:
-            self.downscaled_data.append(-1)
-
-        if data_set_32_file != None:
-            self.dataset32 = np.load(data_set_32_file)
-            self.downscaled_data.append(self.dataset32)
-            self.dataset_error_check(self.dataset128, self.dataset32)
-        else:
-            self.downscaled_data.append(-1)
-            
-        if data_set_16_file != None:
-            self.dataset16 = np.load(data_set_16_file)
-            self.downscaled_data.append(self.dataset16)
-            self.dataset_error_check(self.dataset128, self.dataset16)
-        else:
-            self.downscaled_data.append(-1)
-            
-        if data_set_8_file != None:
-            self.dataset8 = np.load(data_set_8_file)
-            self.downscaled_data.append(self.dataset8)
-            self.dataset_error_check(self.dataset128, self.dataset8)
-        else:
-            self.downscaled_data.append(-1)
-            
-        if data_set_4_file != None:
-            self.dataset4 = np.load(data_set_4_file)
-            self.downscaled_data.append(self.dataset4)
-            self.dataset_error_check(self.dataset128, self.dataset4)
-        else:
-            self.downscaled_data.append(-1)
-        
-        self.downscaled_data_depth = len(self.downscaled_data)
+    def __init__(self):
         self.lowest_varience = 100
         self.output_variance = -1
         self.best_image_index = -1
@@ -77,27 +32,11 @@ class ImageProcessor:
         self.dataset32 = np.load(dataset_32)
         self.dataset64 = np.load(dataset_64)
         self.dataset128 = np.load(dataset_128)
-        self.downscaled_data = [self.dataset128, self.dataset64, self.dataset32, self.dataset16, self.dataset8, self.dataset4]
-        self.downscaled_data_depth = len(self.downscaled_data)
         self.max_index = self.dataset128.shape[0]
         pass
 
-    def set_downscaled_data(self, downscaled_data_paths: list):
-        '''Sets downscaled data. Recieves a list like:
-          [d128_path, d64_path, d32_path, d16_path, d8_path, d4_path]'''
-        downscaled_data = []
-        for path in downscaled_data_paths:
-            ds = np.load(path)
-            downscaled_data.append(ds)
-        self.downscaled_data = downscaled_data
-        self.downscaled_data_depth = len(self.downscaled_data)
-        self.max_index = self.downscaled_data[0].shape[0]
-        pass
 
-    def set_data_set(self, ds):
-        #FOR DELETION PROB GET RID OF 
-        self.dataset128 = np.load(ds)
-        pass
+
     
     def dataset_error_check(self, d1, d2):
         d1_shape_0 = d1.shape[0]
@@ -117,29 +56,11 @@ class ImageProcessor:
         input16 = downscale_img(input32)
         input8 = downscale_img(input16)
         input4 = downscale_img(input8)
-        input_ds_list = [input_image, input64, input32, input16, input8, input4]
 
         index_list = [(i, 10) for i in range(self.max_index)]
         temp_index_list = []
-        first_run = True
-        
-        if len(input_ds_list) != self.downscaled_data_depth:
-            print(f"\nError: img_process    compare_img_with_downscaled_data_set() \n input downscaled to a diffrent depth as dataset\n input depth = {len(input_ds_list)} \n dataset depth = {self.downscaled_data_depth}")
 
         #Enumerate each downscaled depth 
-
-        '''for ds_level in range(self.downscaled_data_depth - 1, -1, -1):
-            input_img_scaled = input_ds_list[ds_level]
-            dataset_ds_level = self.downscaled_data[ds_level]
-            temp_index_list.clear()
-
-            print(f"\nFinding Matches at downscaled depth = {ds_level}. Iterating over index list of length {len(index_list)}")
-            print(f"Dataset Shape = {dataset_ds_level.shape}")
-            print(f"Input IMG shape = {input_img_scaled.shape}")
-
-            index_list = self.compare_input_to_dataset(index_list, dataset_ds_level, input_img_scaled, first_run, self.tolerance)
-            first_run = False'''
-
         #4x4 
         temp_index_list.clear()
         index_list = self.compare_input_to_dataset(index_list, self.dataset4, input4, True, self.tolerance_dict['threshold4'] * .0001 - .0001)
