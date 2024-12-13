@@ -12,43 +12,43 @@ class ImageProcessor:
         
         self.downscaled_data  = []
         if data_set_128_file != None:
-            self.dataset_128 = np.load(data_set_128_file)
-            self.downscaled_data.append(self.dataset_128)
-            self.max_index = self.dataset_128.shape[0]
-            print(f"Data Set of shape {self.dataset_128.shape} Loaded")
+            self.dataset128 = np.load(data_set_128_file)
+            self.downscaled_data.append(self.dataset128)
+            self.max_index = self.dataset128.shape[0]
+            print(f"Data Set of shape {self.dataset128.shape} Loaded")
 
         if data_set_64_file != None:
-            self.dataset_64 = np.load(data_set_64_file)
-            self.downscaled_data.append(self.dataset_64)
-            self.dataset_error_check(self.dataset_128, self.dataset_64)
+            self.dataset64 = np.load(data_set_64_file)
+            self.downscaled_data.append(self.dataset64)
+            self.dataset_error_check(self.dataset128, self.dataset64)
         else:
             self.downscaled_data.append(-1)
 
         if data_set_32_file != None:
-            self.dataset_32 = np.load(data_set_32_file)
-            self.downscaled_data.append(self.dataset_32)
-            self.dataset_error_check(self.dataset_128, self.dataset_32)
+            self.dataset32 = np.load(data_set_32_file)
+            self.downscaled_data.append(self.dataset32)
+            self.dataset_error_check(self.dataset128, self.dataset32)
         else:
             self.downscaled_data.append(-1)
             
         if data_set_16_file != None:
-            self.dataset_16 = np.load(data_set_16_file)
-            self.downscaled_data.append(self.dataset_16)
-            self.dataset_error_check(self.dataset_128, self.dataset_16)
+            self.dataset16 = np.load(data_set_16_file)
+            self.downscaled_data.append(self.dataset16)
+            self.dataset_error_check(self.dataset128, self.dataset16)
         else:
             self.downscaled_data.append(-1)
             
         if data_set_8_file != None:
-            self.dataset_8 = np.load(data_set_8_file)
-            self.downscaled_data.append(self.dataset_8)
-            self.dataset_error_check(self.dataset_128, self.dataset_8)
+            self.dataset8 = np.load(data_set_8_file)
+            self.downscaled_data.append(self.dataset8)
+            self.dataset_error_check(self.dataset128, self.dataset8)
         else:
             self.downscaled_data.append(-1)
             
         if data_set_4_file != None:
-            self.dataset_4 = np.load(data_set_4_file)
-            self.downscaled_data.append(self.dataset_4)
-            self.dataset_error_check(self.dataset_128, self.dataset_4)
+            self.dataset4 = np.load(data_set_4_file)
+            self.downscaled_data.append(self.dataset4)
+            self.dataset_error_check(self.dataset128, self.dataset4)
         else:
             self.downscaled_data.append(-1)
         
@@ -66,20 +66,20 @@ class ImageProcessor:
     def get_variance(self):
         return self.output_variance * 1000
         
-    def set_tolerance(self, t):
-        self.tolerance = t*.0001 - .0001
+    def set_tolerance_dict(self, tolerances:dict):
+        self.tolerance_dict = tolerances
         pass
     
     def set_data(self, dataset_4: str, dataset_8:str, dataset_16:str, dataset_32:str, dataset_64:str, dataset_128:str):
-        self.dataset_4 = np.load(dataset_4)
-        self.dataset_8 = np.load(dataset_8)
-        self.dataset_16 = np.load(dataset_16)
-        self.dataset_32 = np.load(dataset_32)
-        self.dataset_64 = np.load(dataset_64)
-        self.dataset_128 = np.load(dataset_128)
-        self.downscaled_data = [self.dataset_128, self.dataset_64, self.dataset_32, self.dataset_16, self.dataset_8, self.dataset_4]
+        self.dataset4 = np.load(dataset_4)
+        self.dataset8 = np.load(dataset_8)
+        self.dataset16 = np.load(dataset_16)
+        self.dataset32 = np.load(dataset_32)
+        self.dataset64 = np.load(dataset_64)
+        self.dataset128 = np.load(dataset_128)
+        self.downscaled_data = [self.dataset128, self.dataset64, self.dataset32, self.dataset16, self.dataset8, self.dataset4]
         self.downscaled_data_depth = len(self.downscaled_data)
-        self.max_index = self.dataset_128.shape[0]
+        self.max_index = self.dataset128.shape[0]
         pass
 
     def set_downscaled_data(self, downscaled_data_paths: list):
@@ -96,7 +96,7 @@ class ImageProcessor:
 
     def set_data_set(self, ds):
         #FOR DELETION PROB GET RID OF 
-        self.dataset_128 = np.load(ds)
+        self.dataset128 = np.load(ds)
         pass
     
     def dataset_error_check(self, d1, d2):
@@ -112,12 +112,12 @@ class ImageProcessor:
         
 
     def compare_img_with_downscaled_data_set(self, input_image):
-        input_img_ds1 = downscale_img(input_image)
-        input_img_ds2 = downscale_img(input_img_ds1)
-        input_img_ds3 = downscale_img(input_img_ds2)
-        input_img_ds4 = downscale_img(input_img_ds3)
-        input_img_ds5 = downscale_img(input_img_ds4)
-        input_ds_list = [input_image, input_img_ds1, input_img_ds2, input_img_ds3, input_img_ds4, input_img_ds5]
+        input64 = downscale_img(input_image)
+        input32 = downscale_img(input64)
+        input16 = downscale_img(input32)
+        input8 = downscale_img(input16)
+        input4 = downscale_img(input8)
+        input_ds_list = [input_image, input64, input32, input16, input8, input4]
 
         index_list = [(i, 10) for i in range(self.max_index)]
         temp_index_list = []
@@ -128,7 +128,7 @@ class ImageProcessor:
 
         #Enumerate each downscaled depth 
 
-        for ds_level in range(self.downscaled_data_depth - 1, -1, -1):
+        '''for ds_level in range(self.downscaled_data_depth - 1, -1, -1):
             input_img_scaled = input_ds_list[ds_level]
             dataset_ds_level = self.downscaled_data[ds_level]
             temp_index_list.clear()
@@ -137,9 +137,28 @@ class ImageProcessor:
             print(f"Dataset Shape = {dataset_ds_level.shape}")
             print(f"Input IMG shape = {input_img_scaled.shape}")
 
-            index_list = self.compare_input_to_dataset(index_list, dataset_ds_level, input_img_scaled, first_run)
-            first_run = False
-        
+            index_list = self.compare_input_to_dataset(index_list, dataset_ds_level, input_img_scaled, first_run, self.tolerance)
+            first_run = False'''
+
+        #4x4 
+        temp_index_list.clear()
+        index_list = self.compare_input_to_dataset(index_list, self.dataset4, input4, True, self.tolerance_dict['threshold4'] * .0001 - .0001)
+        #8x8
+        temp_index_list.clear()
+        index_list = self.compare_input_to_dataset(index_list, self.dataset8, input8, False, self.tolerance_dict['threshold8'] * .0001 - .0001)
+        #16x16
+        temp_index_list.clear()
+        index_list = self.compare_input_to_dataset(index_list, self.dataset16, input16, False, self.tolerance_dict['threshold16'] * .0001 - .0001)
+        #32x32
+        temp_index_list.clear()
+        index_list = self.compare_input_to_dataset(index_list, self.dataset32, input32, False, self.tolerance_dict['threshold32'] * .0001 - .0001)
+        #64x64
+        temp_index_list.clear()
+        index_list = self.compare_input_to_dataset(index_list, self.dataset64, input64, False, self.tolerance_dict['threshold64'] * .0001 - .0001)
+        #64x64
+        temp_index_list.clear()
+        index_list = self.compare_input_to_dataset(index_list, self.dataset128, input_image, False, self.tolerance_dict['threshold128'] * .0001 - .0001)
+
         print(f"\n\nFinal Input List Size = {len(index_list)}. ")
         #output_index = self.best_image_index
         output_index = random.choice(index_list)
@@ -151,27 +170,27 @@ class ImageProcessor:
 
         sim_img_assets_path = os.path.join(ASSETS_DIR, "similar-images")
 
-        canvas_np_img_to_png(self.dataset_128[output_index,0,:], "similar128.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_128[output_index,1,:], "similar_stroke.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_4[output_index,0,:], "similar4.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds5, "input4.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_8[output_index,0,:], "similar8.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds4, "input8.png",sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_16[output_index,0,:], "similar16.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds3, "input16.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_32[output_index,0,:], "similar32.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds2, "input32.png", sim_img_assets_path)
-        canvas_np_img_to_png(self.dataset_64[output_index,0,:], "similar64.png", sim_img_assets_path)
-        canvas_np_img_to_png(input_img_ds1, "input64.png", sim_img_assets_path)
-        return self.dataset_128[output_index, 1, :]
+        canvas_np_img_to_png(self.dataset128[output_index,0,:], "similar128.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset128[output_index,1,:], "similar_stroke.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset4[output_index,0,:], "similar4.png", sim_img_assets_path)
+        canvas_np_img_to_png(input4, "input4.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset8[output_index,0,:], "similar8.png", sim_img_assets_path)
+        canvas_np_img_to_png(input8, "input8.png",sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset16[output_index,0,:], "similar16.png", sim_img_assets_path)
+        canvas_np_img_to_png(input16, "input16.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset32[output_index,0,:], "similar32.png", sim_img_assets_path)
+        canvas_np_img_to_png(input32, "input32.png", sim_img_assets_path)
+        canvas_np_img_to_png(self.dataset64[output_index,0,:], "similar64.png", sim_img_assets_path)
+        canvas_np_img_to_png(input64, "input64.png", sim_img_assets_path)
+        return self.dataset128[output_index, 1, :]
 
 
 
-    def compare_input_to_dataset(self, index_list, dataset, input_img, first_run):
+    def compare_input_to_dataset(self, index_list, dataset, input_img, first_run, tolerance):
         lowest_variance = 1000000.0
         best_index = 0
         temp_index_list = []
-        t = self.tolerance
+        t = tolerance
         for index, v in index_list:
             skip_data = False
             if first_run:

@@ -166,7 +166,8 @@ class DrawingCanvasFrame(ttk.Frame):
         pass
 
     def generate_stroke(self):
-        threshold = self.gen_tool.get_threshold()
+        thresholds :dict = self.gen_tool.get_thresholds()
+        print(thresholds)
 
         gen_database = get_LOADED_DB()
         pre_path = os.path.join(DATA_DIR, f"{gen_database}/gen_data")
@@ -176,10 +177,11 @@ class DrawingCanvasFrame(ttk.Frame):
         d32_path = os.path.join(pre_path, "32_data.npy")
         d64_path = os.path.join(pre_path, "64_data.npy")
         d128_path = os.path.join(pre_path, "128_data.npy")
-        all_downscaled_data_paths = [d128_path, d64_path, d32_path, d16_path, d8_path, d4_path]
 
-        #self.img_generator.set_downscaled_data(all_downscaled_data_paths)
+        #sets data and thrshold
         self.img_generator.set_data(d4_path, d8_path, d16_path, d32_path, d64_path, d128_path)
+        self.img_generator.set_tolerance_dict(thresholds)
+
 
         #Create input img to be sent for processing
         img_flat = self.np_main_canvas_data.flatten() / 255
