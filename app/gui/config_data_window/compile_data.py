@@ -150,7 +150,11 @@ def cat_data(database, console =None):
     arrays = []
 
     for f in files:
-        arrays.append(np.load(f))
+        try: 
+            arrays.append(np.load(f))
+        except Exception as e:
+            print(f"File {f} failed")
+
 
     result = np.concatenate(arrays,axis=0)
 

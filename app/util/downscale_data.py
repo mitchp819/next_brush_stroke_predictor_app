@@ -14,7 +14,8 @@ def downscale_dataset (data_set):
         stroke_img = data_set[i,1,:]
         downscaled_dataset[i,0,:] = downscale_img(canvas_img)
         downscaled_dataset[i,1,:] = downscale_img(stroke_img)
-        print(f"{i}/{data_set_size}")
+        if(i % 100 == 0):
+            print(f"{i}/{data_set_size}")
     return downscaled_dataset
 
 

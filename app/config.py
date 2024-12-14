@@ -58,5 +58,5 @@ for db in db_list:
     last_id = get_last_file_by_id(first_db_path)
     set_DATABASES(db, dataset_count= last_id+1)
 
-set_DATABASES(db_list[0],save_to= 1)
+set_DATABASES('_master_db',save_to= 1)
 
