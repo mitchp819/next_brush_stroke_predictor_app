@@ -228,3 +228,11 @@ class DrawingCanvasFrame(ttk.Frame):
                 self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr, (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
                 self.np_main_canvas_data[row, col] = pixel_value
         pass
+
+    def flood_canvas(self):
+        greyscale_value = self.brush_tool.get_greyscale_value()
+        greyscale_hex = greyscale_value_to_hex(greyscale_value)
+
+        self.canvas.create_rectangle(0, 0, self.win_x+self.img_sclr, self.win_y+self.img_sclr, fill=greyscale_hex, outline=greyscale_hex)
+        self.np_main_canvas_data = np.full((self.img_x, self.img_y), greyscale_value)
+        self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)

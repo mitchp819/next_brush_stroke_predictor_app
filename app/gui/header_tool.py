@@ -56,6 +56,14 @@ class HeaderTool(tk.Frame):
                                  command= self.load_image,
                                  font=("TkDefaultFont", 10))
         load_img_btn.pack(side=tk.RIGHT, padx=10)
+        flood_canvas_btn= tk.Button(main_frame,
+                                    text="Flood Canvas",
+                                    bg = SECONDARY_COLOR,
+                                    relief='groove',
+                                    border=3,
+                                    command= self.flood_canvas,
+                                    font=("TkDefaultFont", 10))
+        flood_canvas_btn.pack(side=tk.RIGHT, padx=10)
         self.create_data_gather_tool(main_frame)
 
 
@@ -142,6 +150,9 @@ class HeaderTool(tk.Frame):
     def reset_stroke(self):
         self.drawing_canvas.reset_stroke()
         pass
+
+    def flood_canvas(self):
+        self.drawing_canvas.flood_canvas()
 
     def save_dataset_to_db(self):
         databases = get_all_DATABASES()
