@@ -116,14 +116,15 @@ class GenerateTool(tk.Frame):
                                     orient='horizontal',
                                     variable=self.threshold)
         threshold_slider.pack(side=tk.LEFT, fill='x', expand=True, pady=3, padx=3)
+        
         frame.pack(fill='x', expand=True)
+        tk.Label(container, text="A higher threshold value will produce more random less accruate results", wraplength=RIGHT_PANE_WIDTH -30).pack(side=tk.BOTTOM,padx=3,pady=3)
         pass
     
     def create_adv_gen_tab(self, container):
         frame = tk.Frame(container, bg= UI_COLOR)
-        label = tk.Label(frame, text="nothing new yet")
+        label = tk.Label(frame, text="What should go here?\nA grid of different databases to generate from\nHow would those be selected?")
         label.pack()
-        self.pack_gen_thresh_widget(frame)
         return frame
     
     def create_adv_thresh_tab(self, container):
@@ -184,6 +185,16 @@ class GenerateTool(tk.Frame):
                                     variable=self.threshold128,
                                     showvalue=False)
         threshold_slider4.grid(column=1,row=5, sticky='EW')
+        process_img_btn = tk.Button(
+            frame,
+            text="Generate Next Stroke",
+            command = self.generate_image,
+            borderwidth=5,
+            relief='groove',
+            font=("TkDefaultFont", 10),
+            bg=SECONDARY_COLOR
+        )
+        process_img_btn.grid(column=0, row=6, columnspan=2, sticky='EW', padx=(3,0))
         return frame
     
     def on_configure(self, event):

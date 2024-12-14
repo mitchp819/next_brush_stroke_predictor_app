@@ -50,7 +50,9 @@ class ConfigDataWindow(tk.Toplevel):
         self.create_header(header_tool_frame)
         self.create_load_db_frame(main_frame)
         self.create_save_to_db_frame(main_frame)
-        console = AppConsole(main_frame)
+        console_frame = tk.Frame(main_frame, bg = BG_COLOR)
+        self.console = AppConsole(console_frame, console_width=60,console_height=30)
+        console_frame.pack(side=tk.RIGHT)
         pass
 
     def set_info_pane(self, info_pane):
@@ -63,30 +65,24 @@ class ConfigDataWindow(tk.Toplevel):
         new_db_btn = tk.Button(header_frame,
                                text="Create New Database",
                                command= NewDB,
+                               width=30,
                                bg=SECONDARY_COLOR,
                                font=("TkDefaultFont", 10),
                                border=3,
                                relief='groove')
         new_db_btn.pack(side=tk.LEFT, padx=10)
 
-        load_db_btn = tk.Button(header_frame, 
-                                text="Load Database",
-                               bg=SECONDARY_COLOR,
-                               font=("TkDefaultFont", 10),
-                               border=3,
-                               relief='groove')
-        load_db_btn.pack(side=tk.LEFT, padx=10)
-
         compile_data_btn = tk.Button(header_frame, 
                                 text="Compile Data",
+                                width = 30,
                                bg=SECONDARY_COLOR,
-                                command=CompileData,
+                                command=lambda: CompileData(console=self.console),
                                font=("TkDefaultFont", 10),
                                border=3,
                                relief='groove')
         compile_data_btn.pack(side=tk.RIGHT, padx=10)
 
-        header_frame.pack(fill='x', pady=10)
+        header_frame.pack(fill='x', pady=3)
         pass
 
     def create_load_db_frame(self, container: tk.Frame):
@@ -96,7 +92,7 @@ class ConfigDataWindow(tk.Toplevel):
         load_db_frame = tk.Frame(container, 
                                  bg = UI_COLOR,
                                  border=4,
-                                 relief='ridge')
+                                 relief='raised')
         header =tk.Canvas(load_db_frame,
                           width=400 ,
                           height=HEADER_HEIGHT,
@@ -108,17 +104,18 @@ class ConfigDataWindow(tk.Toplevel):
                          font=("TkDefaultFont", 12))
         label.pack(padx=5)
         for db in self.db_list:
-            r = tk.Radiobutton(
-                load_db_frame,
-                text=db,
-                value=db,
-                variable= loaded_db,
-                justify='left',
-                border=3,
-                relief='groove',
-                font=("TkDefaultFont", 10)
-            )
-            r.pack(fill='x',padx=5, pady=5)
+            if check_if_gen_data_exists(db):
+                r = tk.Radiobutton(
+                    load_db_frame,
+                    text=db,
+                    value=db,
+                    variable= loaded_db,
+                    justify='left',
+                    border=3,
+                    relief='groove',
+                    font=("TkDefaultFont", 10)
+                )
+                r.pack(fill='x',padx=5, pady=5)
         save_btn = tk.Button(load_db_frame,
                              text="Save",
                              command=lambda: self.on_loaded_db_change(loaded_db.get()),
@@ -126,14 +123,14 @@ class ConfigDataWindow(tk.Toplevel):
                             relief='raised',
                             font=("TkDefaultFont", 12),
                             bg=SECONDARY_COLOR)
-        save_btn.pack(fill='x', padx=5, pady=5)              
-        load_db_frame.pack(side=tk.LEFT, padx=3, pady=3)
+        save_btn.pack(fill='x', padx=5, pady=5, side= tk.BOTTOM)              
+        load_db_frame.pack(side=tk.LEFT, padx=10, pady=10, fill='y')
 
     def create_save_to_db_frame(self, container: tk.Frame):
         st_db_frame = tk.Frame(container, 
                                bg =UI_COLOR,
                                border=4,
-                               relief='ridge')
+                               relief='raised')
         header =tk.Canvas(st_db_frame,
                     width=400 ,
                     height=HEADER_HEIGHT,
@@ -169,8 +166,8 @@ class ConfigDataWindow(tk.Toplevel):
                             relief='raised',
                             font=("TkDefaultFont", 12),
                             bg= SECONDARY_COLOR)
-        save_btn.pack(fill='x', padx=5, pady=5)              
-        st_db_frame.pack(side = tk.LEFT, padx=3, pady=3)
+        save_btn.pack(fill='x', padx=5, pady=5, side=tk.BOTTOM)              
+        st_db_frame.pack(side = tk.LEFT, padx=10, pady=10, fill='y')
         pass
     
     def on_save_to_db_change(self, vars):
@@ -202,34 +199,37 @@ class ConfigDataWindow(tk.Toplevel):
         
         print(get_all_DATABASES())
         self.info_pane.set_db_save_to_lbl()
+        self.console.print_to_console(f"Databases to Save to: {save_to_db_list}")
         pass
 
     def on_loaded_db_change(self, loaded_db):
-        correct_file_count = 0
-        path = os.path.join(DATA_DIR, f"{loaded_db}/gen_data")
-        for item in os.listdir(path):
-            if item == "4_data.npy":
-                correct_file_count += 1
-            if item == "8_data.npy":
-                correct_file_count += 1
-            if item == "16_data.npy":
-                correct_file_count += 1
-            if item == "32_data.npy":
-                correct_file_count += 1
-            if item == "64_data.npy":
-                correct_file_count += 1
-            if item == "128_data.npy":
-                correct_file_count += 1
-        if correct_file_count == 6:
-            set_LOADED_DB(loaded_db)
-            self.info_pane.set_db_generating_lbl()
-        else:
-            showerror(title="WARNING Data Needs Compiling",
-                    message=f"The selected database has not been compiled and will not generate images. Select Compile Data then choose a database")
-            self.destroy()
+        set_LOADED_DB(loaded_db)
+        self.info_pane.set_db_generating_lbl()
+        self.console.print_to_console(f"Loaded Database for generation: {loaded_db}")
         pass
 
 def create_db_list():
     db_list = os.listdir(DATA_DIR)
     return db_list
+
+def check_if_gen_data_exists(database):
+    exists = False
+    correct_file_count = 0
+    path = os.path.join(DATA_DIR, f"{database}/gen_data")
+    for item in os.listdir(path):
+        if item == "4_data.npy":
+            correct_file_count += 1
+        if item == "8_data.npy":
+            correct_file_count += 1
+        if item == "16_data.npy":
+            correct_file_count += 1
+        if item == "32_data.npy":
+            correct_file_count += 1
+        if item == "64_data.npy":
+            correct_file_count += 1
+        if item == "128_data.npy":
+            correct_file_count += 1
+    if correct_file_count == 6:
+        exists = True
+    return exists
 

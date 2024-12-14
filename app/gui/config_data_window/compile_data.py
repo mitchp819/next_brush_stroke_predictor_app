@@ -13,18 +13,18 @@ except ImportError:
 from app import UI_COLOR, SECONDARY_COLOR, DATA_DIR, HEADER_HEIGHT, TRIM_COLOR, BG_COLOR, downscale_to_all_scales_and_save, shape_img
 
 class CompileData(tk.Toplevel):
-    def __init__(self):
+    def __init__(self, console = None):
         super().__init__()
         self.title("Compile Data")
 
         self.geometry(f"{500}x{500}+300+300")
         self.resizable(False, True)
         self.config(bg=UI_COLOR)
-
+        self.console = console
         self.db_list = os.listdir(DATA_DIR)
 
-        main_frame = tk.Frame(self, bg=UI_COLOR)
-        main_frame.pack(fill='both',expand=True, padx=2, pady=2)
+        main_frame = tk.Frame(self, bg=BG_COLOR)
+        main_frame.pack(fill='both',expand=True, padx=10, pady=10)
         header =tk.Canvas(main_frame,
                           width=400 ,
                           height=HEADER_HEIGHT,
@@ -41,19 +41,21 @@ class CompileData(tk.Toplevel):
 
 
         main_label = tk.Label(self.selection_grid,
-                              text="Select Database to Compile")
-        main_label.grid(column=0,row=0)
+                              text="Select Database to Compile",
+                              bg=UI_COLOR,
+                              relief='raised')
+        main_label.pack(fill='x', padx=10, pady=10)
 
         count = 1
         for db in self.db_list:
             btn = tk.Button(self.selection_grid,
                             text=db,
-                            command= lambda db =db: self.db_settings(container, db))
-            btn.grid(column=0, row=count, sticky=tk.EW, pady=3)
+                            command= lambda db =db: self.db_settings(container, db),
+                            relief='raised'
+                            )
+            btn.pack(fill="x", padx=15, pady=3)
             count += 1
-    
-
-        self.selection_grid.pack()
+        self.selection_grid.pack(fill='x', padx=10, pady=10)
         pass
 
     def db_settings(self, container: tk.Frame, db:str ):
@@ -123,23 +125,24 @@ class CompileData(tk.Toplevel):
         self.create_db_selection(container)
     
     def compile_data(self, db, flip_h, flip_v, rotate):
+        self.console.print_to_console(f"Compiling Database: {db}")
         print(f"{db}, H {flip_h}, V {flip_v}, R {rotate}")
-        main_cat_db =  cat_data(database=db)
+        main_cat_db =  cat_data(database=db, console= self.console)
         final_db = main_cat_db
         if flip_h:
-            flipped_h = flip_db_h(main_cat_db)
+            flipped_h = flip_db_h(main_cat_db, console=self.console)
             final_db = np.concatenate((final_db, flipped_h), axis=0)
         if flip_v:
-            flipped_v = flip_db_v(main_cat_db)
+            flipped_v = flip_db_v(main_cat_db, console=self.console)
             final_db = np.concatenate((final_db, flipped_v), axis=0)
         if rotate:
-            rotate_db(main_cat_db)
-            #cat with final_db
+            rotated_data = rotate_db(main_cat_db, console=self.console)
+            final_db = np.concatenate((final_db, rotated_data), axis=0)
         
         save_path = os.path.join(DATA_DIR, f'{db}/gen_data')
         downscale_to_all_scales_and_save(final_db, save_path)
         showinfo(title="Compiling Finished",
-                 message=f"{db} Compiled and Ready to Generate")
+                 message=f"{db} Compiled and Ready to Generate\nSize: {final_db.shape}")
         self.destroy()
         pass
 
@@ -164,7 +167,7 @@ def cat_data(database, console =None):
     print(f"Data concatenated into np array shape = {result.shape}")
     return result
 
-def flip_db_h(main_np):
+def flip_db_h(main_np, console = None):
     output_list = []
     for element in main_np:
         canvas = element[0]
@@ -187,9 +190,11 @@ def flip_db_h(main_np):
     output_np = np.concatenate([output_list], axis=0)
     print("All elements flipped Horizontally")
     print(output_np.shape)
+    if console != None:
+        console.print_to_console(f"All elements flipped Horizontally\nNew output shape: {output_np.shape}")
     return output_np
 
-def flip_db_v(main_np):
+def flip_db_v(main_np, console = None):
     output_list = []
     for element in main_np:
         canvas = element[0]
@@ -212,9 +217,11 @@ def flip_db_v(main_np):
     output_np = np.concatenate([output_list], axis=0)
     print("All elements flipped Vertically")
     print(output_np.shape)
+    if console != None:
+        console.print_to_console(f"All elements flipped Vertically\nNew output shape: {output_np.shape}")
     return output_np
 
-def rotate_db(main_np):
+def rotate_db(main_np, console = None):
     output_list = []
     for element in main_np:
         canvas = element[0]
@@ -256,4 +263,6 @@ def rotate_db(main_np):
     output_np = np.concatenate([output_list], axis=0)
     print("All elements rotated")
     print(output_np.shape)
-    pass
+    if console != None:
+        console.print_to_console(f"All elements rotated four ways. New output shape: {output_np.shape}")
+    return output_np

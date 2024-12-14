@@ -65,7 +65,7 @@ class InfoPane(tk.Frame):
     def set_db_saved_to(self, db_list: list):
         text_out = "Data Being Saved To: "
         for db in db_list:
-            text_out = text_out +", " + db
+            text_out = text_out +"  " + db
         self.db_saved_to.config(text=text_out)
         print("set db save to")
         pass
@@ -87,7 +87,7 @@ class InfoPane(tk.Frame):
         lbl_text = "Data Being Saved To:"
         for db, value in databases.items():
             if value[0] == 1:
-                lbl_text = lbl_text + " ," + db 
+                lbl_text = lbl_text + "  " + db 
         self.db_saved_to.config(text=lbl_text)
         pass
 

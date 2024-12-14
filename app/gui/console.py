@@ -10,7 +10,7 @@ except ImportError:
 from app import  UI_COLOR, TRIM_COLOR, CONSOLE_INTRO_TEXT, HEADER_HEIGHT, RIGHT_PANE_WIDTH
 
 class AppConsole(tk.Frame):
-    def __init__(self, container):
+    def __init__(self, container, console_width = 30, console_height = 4):
         super().__init__(container)
 
 
@@ -27,8 +27,8 @@ class AppConsole(tk.Frame):
         header.pack(fill='x', pady=(0,3))
 
         self.console = ScrolledText(main_frame, 
-                                    width = 30, 
-                                    height = 4, 
+                                    width = console_width, 
+                                    height = console_height, 
                                     font = ("Consolas", 9))
         self.console.pack(padx=3,pady=3, fill='both')
         self.console['state'] = 'disabled'
