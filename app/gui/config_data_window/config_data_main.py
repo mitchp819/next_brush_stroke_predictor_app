@@ -10,8 +10,8 @@ except ImportError:
 
 
 from app import  AppConsole, set_LOADED_DB, get_LOADED_DB, set_DATABASES, get_all_DATABASES, get_last_file_by_id, UI_COLOR, TRIM_COLOR, SECONDARY_COLOR, BG_COLOR, HEADER_HEIGHT, DATA_DIR
-from config_data_window import NewDB
-from config_data_window import CompileData
+from config_data_window import NewDB, CompileData, DeleteDatabase
+
 
 class ConfigDataWindow(tk.Toplevel):
     def __init__(self):
@@ -71,6 +71,16 @@ class ConfigDataWindow(tk.Toplevel):
                                border=3,
                                relief='groove')
         new_db_btn.pack(side=tk.LEFT, padx=10)
+
+        delete_db = tk.Button(header_frame,
+                               text="Delete Existing Database",
+                               command= DeleteDatabase,
+                               width=30,
+                               bg=SECONDARY_COLOR,
+                               font=("TkDefaultFont", 10),
+                               border=3,
+                               relief='groove')
+        delete_db.pack(side=tk.LEFT, padx=10)
 
         compile_data_btn = tk.Button(header_frame, 
                                 text="Compile Data",

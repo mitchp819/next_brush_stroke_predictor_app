@@ -36,10 +36,6 @@ class CompileData(tk.Toplevel):
 
     def create_db_selection(self, container):
         self.selection_grid = tk.Frame(container, bg=UI_COLOR)
-        self.selection_grid.columnconfigure(0, weight=3)
-        self.selection_grid.columnconfigure(1, weight=3)
-
-
         main_label = tk.Label(self.selection_grid,
                               text="Select Database to Compile",
                               bg=UI_COLOR,
