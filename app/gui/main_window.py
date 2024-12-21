@@ -61,9 +61,9 @@ class MainWindow(tk.Tk):
         generate_tool.set_drawing_canvas(drawing_canvas)
         brush_tool.set_drawing_canvas(drawing_canvas)
 
-        header_tool.toggle_data_gather_mode('auto')
-
-
+        header_tool.toggle_data_gather_mode('manual')
+        
+        
     def config_menu(self):
         menubar = Menu(self)
         self.config(menu = menubar)

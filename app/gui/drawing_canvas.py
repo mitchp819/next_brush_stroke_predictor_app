@@ -141,18 +141,19 @@ class DrawingCanvasFrame(ttk.Frame):
         pass
 
     def save_dataset_to_db(self, database_folder):
-        pil_main_img = Image.fromarray(self.np_main_canvas_data, mode="L")
-        root_path = ROOT_DIR
         ds_id = get_a_DATABASE(database_folder)[1]
 
         #save npy to folder
-        data_relative_path = f'data/{database_folder}/image_data/img{ds_id}data.npy'
-        data_absolute_path = os.path.join(root_path, data_relative_path)
+        data_relative_path = f'{database_folder}/image_data/img{ds_id}data.npy'
+        data_absolute_path = os.path.join(DATA_DIR, data_relative_path)
         np.save(data_absolute_path, self.compiled_data)
 
         #save png to folder
-        png_relative_path = f'data/{database_folder}/final_image/img{ds_id}.png'
-        png_absolute_path = os.path.join(root_path, png_relative_path)
+        png_relative_path = f'{database_folder}/final_image/img{ds_id}.png'
+        png_absolute_path = os.path.join(DATA_DIR, png_relative_path)
+        print(png_absolute_path)
+        image_array = self.np_main_canvas_data.astype(np.uint8)
+        pil_main_img = Image.fromarray(image_array, mode="L")
         pil_main_img.save(png_absolute_path)
 
         self.app_console.print_to_console(f"Dataset saved to Database: {database_folder}")
@@ -213,11 +214,12 @@ class DrawingCanvasFrame(ttk.Frame):
         saved_img_folder = os.path.join(ASSETS_DIR, "saved-images")
         larget_id = get_last_file_by_id(saved_img_folder)
         save_name = f"saved_img{larget_id+1}.png"
-
-        image = Image.fromarray(self.np_main_canvas_data)
+        print(f"np_main_canvas_data shape = {self.np_main_canvas_data.shape}" )
+        image_array = self.np_main_canvas_data.astype(np.uint8)
+        image = Image.fromarray(image_array)
         scaled_image = image.resize((128*6, 128*6), Image.NEAREST)
-        
-        scaled_image.save(os.path.join(saved_img_folder, save_name))
+        save_path = os.path.join(saved_img_folder, save_name)
+        scaled_image.save(save_path)
         self.app_console.print_to_console(f"Image saved to saved-images folder\n under the name {save_name}")
         pass
         

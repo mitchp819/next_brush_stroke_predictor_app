@@ -65,7 +65,7 @@ class HeaderTool(tk.Frame):
                                     font=("TkDefaultFont", 10))
         flood_canvas_btn.pack(side=tk.RIGHT, padx=10)
         self.create_data_gather_tool(main_frame)
-
+        self.after(200, self.open_config_data)
 
     def set_drawing_canvas(self, drawing_canvas):
         self.drawing_canvas = drawing_canvas
