@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from typing import Literal
 try:
     from ctypes import windll
     windll.shcore.SetProcessDpiAwareness(1)
@@ -99,8 +100,28 @@ class GenerateTool(tk.Frame):
     def pack_gen_thresh_widget(self,container):
         process_img_btn = tk.Button(
             container,
-            text="Generate Next Stroke",
-            command = self.generate_image,
+            text="Generate Next Stroke (Any)",
+            command = lambda: self.generate_image("any"),
+            borderwidth=5,
+            relief='groove',
+            font=("TkDefaultFont", 10),
+            bg=SECONDARY_COLOR
+        )
+        process_img_btn.pack(fill='x', expand=True, pady=3, padx=3)
+        process_img_btn = tk.Button(
+            container,
+            text="Generate Next Stroke (Line)",
+            command = lambda: self.generate_image("line"),
+            borderwidth=5,
+            relief='groove',
+            font=("TkDefaultFont", 10),
+            bg=SECONDARY_COLOR
+        )
+        process_img_btn.pack(fill='x', expand=True, pady=3, padx=3)
+        process_img_btn = tk.Button(
+            container,
+            text="Generate Next Stroke (Shape)",
+            command = lambda: self.generate_image("shape"),
             borderwidth=5,
             relief='groove',
             font=("TkDefaultFont", 10),
@@ -118,7 +139,6 @@ class GenerateTool(tk.Frame):
         threshold_slider.pack(side=tk.LEFT, fill='x', expand=True, pady=3, padx=3)
         
         frame.pack(fill='x', expand=True)
-        tk.Label(container, text="A higher threshold value will produce more random less accruate results", wraplength=RIGHT_PANE_WIDTH -30).pack(side=tk.BOTTOM,padx=3,pady=3)
         pass
     
     def create_adv_gen_tab(self, container):
@@ -201,19 +221,8 @@ class GenerateTool(tk.Frame):
         self.scroll_canvas.configure(scrollregion=self.scroll_canvas.bbox("all"))
         self.scroll_canvas.itemconfig("window", width = event.width)
 
-    def create_scrollbar(self, container):
-        self.scroll_canvas = tk.Canvas(container, width=RIGHT_PANE_WIDTH -30, height=330, bg= UI_COLOR)
-        scrollbar = ttk.Scrollbar(container, orient='vertical', command=self.scroll_canvas.yview)
-        scrollbar.pack(side="right", fill='y')
-        self.scroll_canvas.pack(side='left', fill='both', expand=True)
-        self.scroll_canvas.configure(yscrollcommand=scrollbar.set)
-        scrollable_frame = ttk.Frame(self.scroll_canvas)
-        self.scroll_canvas.create_window((0,0), window=scrollable_frame, anchor="nw")
-        scrollable_frame.bind("<Configure>", self.on_configure)
-        return scrollable_frame
-
-    def generate_image(self):
-        self.drawing_canvas.generate_stroke()
+    def generate_image(self, type: Literal['any', 'line', 'shape']):
+        self.drawing_canvas.generate_stroke(type)
         pass
 
  

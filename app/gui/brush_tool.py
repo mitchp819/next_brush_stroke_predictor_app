@@ -20,6 +20,7 @@ class BrushTool(tk.Frame):
         self.greyscale_value.set(0)
 
         self.drawing_canvas = None
+        self.app_console = None
 
         frame_width = 120
         main_frame = tk.Frame(container,
@@ -52,6 +53,8 @@ class BrushTool(tk.Frame):
     
     def set_drawing_canvas(self, drawing_canvas):
         self.drawing_canvas = drawing_canvas
+    def set_app_console(self, app_console):
+        self.app_console = app_console
 
     def create_sample_brush_frame(self, container):
         frame = tk.Frame(
@@ -125,14 +128,15 @@ class BrushTool(tk.Frame):
 
     def update_sample_brush(self,v):
         greyscale_hex = greyscale_value_to_hex(self.greyscale_value.get())
-        sample_width = self.brush_size.get() + self.img_sclr
+        brush_size = self.brush_size.get()
+        sample_width = brush_size + self.img_sclr
         self.sample_brush.config(
             width = sample_width,
             height = sample_width,
             bg = greyscale_hex
         )
         self.greyscale_value_label.config(text=self.greyscale_value.get())
-        self.brush_size_label.config(text= self.brush_size.get())
+        self.brush_size_label.config(text= brush_size)
         pass
     
     def generate_image(self):

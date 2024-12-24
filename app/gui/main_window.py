@@ -60,6 +60,7 @@ class MainWindow(tk.Tk):
         drawing_canvas.set_info_pane(info_pane)
         generate_tool.set_drawing_canvas(drawing_canvas)
         brush_tool.set_drawing_canvas(drawing_canvas)
+        brush_tool.set_app_console(app_console)
 
         header_tool.toggle_data_gather_mode('manual')
         

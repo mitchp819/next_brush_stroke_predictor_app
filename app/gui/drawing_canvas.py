@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from typing import Literal
 import numpy as np
 from PIL import Image
 import os
@@ -12,7 +13,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import greyscale_value_to_hex, shape_img, UI_COLOR, ROOT_DIR, ASSETS_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB, get_last_file_by_id
+from app import greyscale_value_to_hex, shape_img, UI_COLOR, ROOT_DIR, ASSETS_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB, get_last_file_by_id, canvas_np_img_to_png
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -113,16 +114,21 @@ class DrawingCanvasFrame(ttk.Frame):
         pass
     
     def save_stroke_to_dataset(self):
+        ratio = get_edge_to_shape_ratio(self.np_stroke_canvas_data)
+        if ratio == -1:
+            self.app_console.print_to_console("No brush stroke data to save")
+            return
+        edge_to_shape_ratio = np.array([ratio])
+
         #flatten and normalize between 0-1
         flat_normal_last_canvas = self.last_canvas.flatten() / 255
         flat_normal_stroke_canvas = self.np_stroke_canvas_data.flatten() /255
         
         #saves color values in array
         filler =  np.array([.5])
-        color_data = np.array([self.brush_tool.get_greyscale_value() / 255])
         
         flat_normal_last_canvas = np.concatenate((flat_normal_last_canvas,filler))
-        flat_normal_stroke_canvas = np.concatenate((flat_normal_stroke_canvas, color_data))
+        flat_normal_stroke_canvas = np.concatenate((flat_normal_stroke_canvas, edge_to_shape_ratio))
 
         insertion_data = np.array([flat_normal_last_canvas, flat_normal_stroke_canvas])
         insertion_data = insertion_data[np.newaxis, :]
@@ -130,6 +136,7 @@ class DrawingCanvasFrame(ttk.Frame):
         #overwrites data
         self.last_canvas = self.np_main_canvas_data
         self.stroke_count += 1
+        self.np_stroke_canvas_data.fill(-1)
 
         #cats insertion data with compiled data
         if self.compiled_data is None:
@@ -166,7 +173,7 @@ class DrawingCanvasFrame(ttk.Frame):
         print("Stroke Data Reset")
         pass
 
-    def generate_stroke(self):
+    def generate_stroke(self, type: Literal['any', 'line', 'shape']):
         thresholds :dict = self.gen_tool.get_thresholds()
         print(thresholds)
 
@@ -183,7 +190,6 @@ class DrawingCanvasFrame(ttk.Frame):
         self.img_generator.set_data(d4_path, d8_path, d16_path, d32_path, d64_path, d128_path)
         self.img_generator.set_tolerance_dict(thresholds)
 
-
         #Create input img to be sent for processing
         img_flat = self.np_main_canvas_data.flatten() / 255
         filler =  np.array([.5])
@@ -191,7 +197,7 @@ class DrawingCanvasFrame(ttk.Frame):
         Image.fromarray(self.np_main_canvas_data.astype('uint8'), 'L').save("assets/similar-images/input_canvas.png")
 
         #Send input to image_processing script
-        output_stroke = self.img_generator.compare_img_with_downscaled_data_set(input_img)
+        output_stroke = self.img_generator.compare_img_with_downscaled_data_set(input_img, type)
         if not isinstance(output_stroke, np.ndarray):
             print("Error: output_stroke is not a np.ndarray")
             return
@@ -238,3 +244,38 @@ class DrawingCanvasFrame(ttk.Frame):
         self.canvas.create_rectangle(0, 0, self.win_x+self.img_sclr, self.win_y+self.img_sclr, fill=greyscale_hex, outline=greyscale_hex)
         self.np_main_canvas_data = np.full((self.img_x, self.img_y), greyscale_value)
         self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)
+
+def get_edge_to_shape_ratio(np_stroke_img: np.array):
+    edge_count = get_edge_count(np_stroke_img)
+    shape_count = get_shape_count(np_stroke_img)
+    if shape_count <= 0:
+        return -1
+    edge_to_shape_ratio = edge_count / shape_count 
+    print(f"edge count = {edge_count}, shape count = {shape_count}, ratio = {edge_to_shape_ratio}")
+    return edge_to_shape_ratio
+
+def get_edge_count(np_image: np.array):
+    edges = np.zeros_like(np_image)
+    edge_count = 0
+    for x in range(1, np_image.shape[0]-1):
+        for y in range(1, np_image.shape[1]-1):
+            neighbors_sum = (
+                np_image[x-1, y-1] + np_image[x-1, y]
+                + np_image[x-1, y+1] + np_image[x, y+1] + np_image[x+1, y+1]
+                + np_image[x+1, y] + np_image[x+1, y-1] + np_image[x, y-1]
+            )
+            neighbors_avg = neighbors_sum/8
+            edge_value = abs(np_image[x,y] - neighbors_avg) * 255
+            edges[x,y] = edge_value
+            if edge_value > 0: 
+                edge_count += 1
+    Image.fromarray(edges.astype('uint8'), 'L').save("assets/edges.png")
+    return edge_count
+
+def get_shape_count(np_image: np.array):
+    shape_count = 0
+    for x in range(np_image.shape[0]):
+        for y in range(np_image.shape[1]):
+            if np_image[x,y] >= 0:
+                shape_count += 1
+    return shape_count

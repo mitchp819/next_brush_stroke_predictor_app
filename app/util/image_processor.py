@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+from typing import Literal
 import random
 import os
 
@@ -50,7 +51,9 @@ class ImageProcessor:
             print(f"New max index = {self.max_index}")
         
 
-    def compare_img_with_downscaled_data_set(self, input_image):
+    def compare_img_with_downscaled_data_set(self, input_image, type: Literal['any', 'line', 'shape']):
+        self.type = type
+        
         input64 = downscale_img(input_image)
         input32 = downscale_img(input64)
         input16 = downscale_img(input32)
@@ -111,21 +114,34 @@ class ImageProcessor:
         lowest_variance = 1000000.0
         best_index = 0
         temp_index_list = []
-        t = tolerance* .0001 - .0001
-        for index, v in index_list:
+        tolerance_modified = tolerance* .0001 - .0001
+        for index, value in index_list:
             skip_data = False
             if first_run:
                 skip_data = prev_match_check(index, self.previous_matchs, self.prev_match_range)
-                t *= 1.0005
+                tolerance_modified *= 1.0005
             if skip_data == False:
                 dataset_element = dataset[index, 0 , :]
                 variance = compare_two_images(input_img, dataset_element)
+                edge_to_shape_ratio = dataset[index, 1 , :][-1]
+                if self.type == 'line':
+                    if edge_to_shape_ratio > .55:
+                        variance -= .1
+                    else:
+                        variance += .1
+                if self.type == 'shape':
+                    if edge_to_shape_ratio <= .55:
+                        variance -= .1
+                    else:
+                        variance += .1
+                
+
                 if variance < lowest_variance:
                     lowest_variance = variance
                     best_index = index
-                if variance <= lowest_variance + t:
+                if variance <= lowest_variance + tolerance_modified:
                     temp_index_list.append((index, variance))
-        max_variance = lowest_variance + t
+        max_variance = lowest_variance + tolerance_modified
         print(f"TempList Length = {len(temp_index_list)}")
         output_index_list = trim_data_set(temp_index_list, max_variance)
         print(f"Lowest Variance = {lowest_variance}. Index = {best_index}")

@@ -41,4 +41,5 @@ class AppConsole(tk.Frame):
         self.console['state'] = 'normal'
         self.console.insert('1.0', '\n')
         self.console.insert('1.0', text)
+        self.console.insert('1.0', "-[ ")
         self.console['state'] = 'disabled'
