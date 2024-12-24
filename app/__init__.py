@@ -24,3 +24,5 @@ from .gui.main_window import MainWindow
 
 
 __all__ = ["ImageProcessor","WindowHeader", "BrushTool", "GenerateTool", "HeaderTool", "InfoPane", "AppConsole", "DrawingCanvasFrame", "MainWindow"]
+
+

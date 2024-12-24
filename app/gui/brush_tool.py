@@ -140,4 +140,4 @@ class BrushTool(tk.Frame):
         pass
     
     def generate_image(self):
-        self.drawing_canvas.generate_stroke()
+        self.drawing_canvas.generate_stroke(type='any')

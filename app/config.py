@@ -15,7 +15,19 @@ CONSOLE_INTRO_TEXT = "Next Brush Stroke Predictor Loaded\n<<<System Console>>"
 current_dir = os.path.dirname(__file__) 
 ROOT_DIR = os.path.abspath(os.path.join(current_dir, ".."))
 DATA_DIR = os.path.abspath(os.path.join(ROOT_DIR, "data"))
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
 ASSETS_DIR = os.path.abspath(os.path.join(ROOT_DIR, "assets"))
+if not os.path.exists(ASSETS_DIR):
+    os.makedirs(ASSETS_DIR)
+SIMILAR_IMAGES_DIR = os.path.abspath(os.path.join(ASSETS_DIR, "similar-images"))
+if not os.path.exists(SIMILAR_IMAGES_DIR):
+    os.makedirs(SIMILAR_IMAGES_DIR)
+SAVED_IMAGES_DIR = os.path.abspath(os.path.join(ASSETS_DIR, "saved-images"))
+if not os.path.exists(SAVED_IMAGES_DIR):
+    os.makedirs(SAVED_IMAGES_DIR)
+
+
 
 #numbers
 HEADER_HEIGHT = 20
