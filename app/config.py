@@ -27,8 +27,6 @@ SAVED_IMAGES_DIR = os.path.abspath(os.path.join(ASSETS_DIR, "saved-images"))
 if not os.path.exists(SAVED_IMAGES_DIR):
     os.makedirs(SAVED_IMAGES_DIR)
 
-
-
 #numbers
 HEADER_HEIGHT = 20
 RIGHT_PANE_WIDTH = 450
@@ -43,8 +41,6 @@ def set_LOADED_DB(input: str):
     print(f"LOADED_DB set to {input}")
 def get_LOADED_DB() -> str:
     return LOADED_DB
-
-
 
 DATABASES = {}
 def set_DATABASES(database:str, save_to = None, dataset_count = None):

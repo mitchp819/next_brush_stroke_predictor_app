@@ -13,7 +13,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import greyscale_value_to_hex, shape_img, UI_COLOR, ROOT_DIR, ASSETS_DIR, DATA_DIR, get_a_DATABASE, ImageProcessor, get_LOADED_DB, get_last_file_by_id, canvas_np_img_to_png
+from app import  ImageProcessor, greyscale_value_to_hex, shape_img, get_a_DATABASE, get_LOADED_DB, get_last_file_by_id, canvas_np_img_to_png, UI_COLOR, ASSETS_DIR, DATA_DIR
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -33,10 +33,7 @@ class DrawingCanvasFrame(ttk.Frame):
         self.img_generator = ImageProcessor()
         
         #gui
-        main_frame = tk.Frame(self,
-                              border=3,
-                              relief='raised',
-                              bg=UI_COLOR)
+        main_frame = tk.Frame(self,border=3, relief='raised', bg=UI_COLOR)
         main_frame.pack()
         
         self.canvas = tk.Canvas(main_frame, 
@@ -75,7 +72,6 @@ class DrawingCanvasFrame(ttk.Frame):
     
     def on_mouse_down(self, event):
         if  self.data_gather_tool.get_data_gather_mode() == 'auto':
-            #Whipe np stroke canvas
             self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)
         self.create_mark(event)
         pass
@@ -86,7 +82,6 @@ class DrawingCanvasFrame(ttk.Frame):
         pass
 
     def create_mark(self, event):
-        #variables
         greyscale_value = self.brush_tool.get_greyscale_value()
         greyscale_hex = greyscale_value_to_hex(greyscale_value)
         brush_size = self.brush_tool.get_brush_size()
@@ -114,31 +109,24 @@ class DrawingCanvasFrame(ttk.Frame):
         pass
     
     def save_stroke_to_dataset(self):
-        ratio = get_edge_to_shape_ratio(self.np_stroke_canvas_data)
-        if ratio == -1:
+        edge_to_shape_ratio = get_edge_to_shape_ratio(self.np_stroke_canvas_data)
+        if edge_to_shape_ratio == -1:
             self.app_console.print_to_console("No brush stroke data to save")
             return
-        edge_to_shape_ratio = np.array([ratio])
-
-        #flatten and normalize between 0-1
+        #Create Insertion Data
+        edge_to_shape_ratio_np_array = np.array([edge_to_shape_ratio])
+        filler =  np.array([.5])
         flat_normal_last_canvas = self.last_canvas.flatten() / 255
         flat_normal_stroke_canvas = self.np_stroke_canvas_data.flatten() /255
-        
-        #saves color values in array
-        filler =  np.array([.5])
-        
         flat_normal_last_canvas = np.concatenate((flat_normal_last_canvas,filler))
-        flat_normal_stroke_canvas = np.concatenate((flat_normal_stroke_canvas, edge_to_shape_ratio))
-
+        flat_normal_stroke_canvas = np.concatenate((flat_normal_stroke_canvas, edge_to_shape_ratio_np_array))
         insertion_data = np.array([flat_normal_last_canvas, flat_normal_stroke_canvas])
         insertion_data = insertion_data[np.newaxis, :]
-
-        #overwrites data
+        #Overwrites data
         self.last_canvas = self.np_main_canvas_data
         self.stroke_count += 1
         self.np_stroke_canvas_data.fill(-1)
-
-        #cats insertion data with compiled data
+        #Cats insertion data with compiled data
         if self.compiled_data is None:
             self.compiled_data = insertion_data
         else:
@@ -147,7 +135,7 @@ class DrawingCanvasFrame(ttk.Frame):
         print(self.compiled_data.shape)
         pass
 
-    def save_dataset_to_db(self, database_folder):
+    def save_dataset_to_db(self, database_folder:str):
         ds_id = get_a_DATABASE(database_folder)[1]
 
         #save npy to folder
@@ -233,7 +221,8 @@ class DrawingCanvasFrame(ttk.Frame):
         for row, column_array in enumerate(image):
             for col, pixel_value in enumerate(column_array):  
                 greyscale_hex = greyscale_value_to_hex(pixel_value)
-                self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr, (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
+                self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr,
+                                              (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
                 self.np_main_canvas_data[row, col] = pixel_value
         pass
 

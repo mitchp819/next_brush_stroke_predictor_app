@@ -5,7 +5,6 @@ class App():
     def __init__(self):
         self.root = tk.Tk()
         self.main_window = MainWindow(self.root)
-
         pass
 
     def run(self):
