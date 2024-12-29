@@ -1,7 +1,7 @@
 # Next Brush Stroke Predictor 
 Description: 
 
-### Git Installation 
+## Instilation
 Install dependencies: pip install -r requirements.txt
 
 # About
@@ -24,9 +24,10 @@ Install dependencies: pip install -r requirements.txt
     - Brush Greyscale Slider: A slider from 0 - 255 defining the Hue of the greyscale value. Where 0 represents black and 255 represents white. 
     - Sample Brush Stroke: Updates a sample brush stroke when the Brush Size Slider or the Brush Grey Scale Slider are modified by the user. 
 - **Canvas**: The drawing canvas accepts input defined by the **Brush Tool**. The size of the Canvas is 128x128 pixels but the Canvas is scaled to your screen size. 
-- **Threshold Slider**:
-- **Console**:
-- **Info Pane**:
+- **Threshold Slider**: The threshold slider defines  how close the generated brush stroke is to the input. A higher threshold will produce more random outputs. 
+    - Threshold by scale: Under Advanced Thresholding the user can modify the thresholds for each scale of input to data element comparison. A high threshold will essentially turn that scale 'Off'. A low threshold will weed out more elements increase a given scales importants. *Tip: a low threshold at smaller scales and a high threshold at larger scales will generate outputs with more generalization.*
+- **Console**: Documents events. 
+- **Info Pane**: Includes text and images related to the configured settings and the generated input output. 
 
 ##### Config Data Window
 
@@ -51,14 +52,13 @@ Install dependencies: pip install -r requirements.txt
 - **Delete Existing Database**: Allows the user to select and delete a database.
 - **Compile Data**: Prepares data for generation. Users can select to Mirror data Horizontally, Vertically, and to Rotate the data three times. 
 
-## TODO
+## Purposed Features
 
-- [ ] Reset button: Resets current data collection and blanks out canvas 
-- [ ] Limit duplicate windows 
-- [ ] Config Data Console Set up + link to main console 
-- [ ] Adv Generation: what even is that 
-- [x] Gen button on adv Thresholding 
-- [x] Delete Data Set
-- [ ] Update data set window 
-- [ ] Metadata
-- [ ] Error Checking when data sets are blank
+- **Reset Button**: Resets current dataset. Currently requires program to be restarted. 
+- **Metadata**: Store information of settings for future loading. 
+- **Undo Button**: ability to revert to previous values. 
+- **Limit duplicate windows**: Config Data Window and others will not produce duplicates 
+- **Adv Generation Multiple Database Options**: Choose which database you wish to generate from. 
+- **Update database or dataset**: Allow users to look through databases or datasets. 
+
+
