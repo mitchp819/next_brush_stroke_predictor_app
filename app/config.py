@@ -34,7 +34,12 @@ RIGHT_PANE_WIDTH = 450
 #data stuff
 db_list = os.listdir(DATA_DIR)
 
-LOADED_DB = db_list[0]
+if db_list:
+    LOADED_DB = db_list[0]
+else:
+    LOADED_DB = None
+    print("No database found in DATA_DIR")
+
 def set_LOADED_DB(input: str):
     global LOADED_DB
     LOADED_DB = input

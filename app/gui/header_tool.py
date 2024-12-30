@@ -12,7 +12,7 @@ except ImportError:
     pass
 
 from app import UI_COLOR, SECONDARY_COLOR, get_all_DATABASES
-from config_data_window.config_data_main import ConfigDataWindow
+#from config_data_window.config_data_main import ConfigDataWindow
 
 class HeaderTool(tk.Frame):
     def __init__(self, container):
@@ -139,6 +139,7 @@ class HeaderTool(tk.Frame):
         pass
 
     def open_config_data(self):
+        from app import ConfigDataWindow
         config_window = ConfigDataWindow()
         config_window.set_info_pane(self.info_pane)
         pass

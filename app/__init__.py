@@ -16,13 +16,13 @@ from .gui.gen_tool import GenerateTool
 from .gui.console import AppConsole
 from .gui.header_tool import HeaderTool
 from .gui.info_pane import InfoPane
-#from .gui.config_data_window.config_data_main import ConfigDataWindow
+from .gui.config_data_window.config_data_main import ConfigDataWindow
 
 from .gui.drawing_canvas import DrawingCanvasFrame
 from .gui.main_window import MainWindow
 
 
 
-__all__ = ["ImageProcessor","WindowHeader", "BrushTool", "GenerateTool", "HeaderTool", "InfoPane", "AppConsole", "DrawingCanvasFrame", "MainWindow"]
+__all__ = ["ImageProcessor","WindowHeader", "BrushTool", "GenerateTool", "HeaderTool", "InfoPane", "AppConsole", "ConfigDataWindow" "DrawingCanvasFrame", "MainWindow"]
 
 

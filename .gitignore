@@ -5,3 +5,6 @@ __pycache__/
 desktop.ini
 assets/
 assets/edges.png
+main.spec
+build/
+dist/
