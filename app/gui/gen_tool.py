@@ -208,7 +208,7 @@ class GenerateTool(tk.Frame):
         process_img_btn = tk.Button(
             frame,
             text="Generate Next Stroke",
-            command = self.generate_image,
+            command = lambda: self.generate_image('any'),
             borderwidth=5,
             relief='groove',
             font=("TkDefaultFont", 10),

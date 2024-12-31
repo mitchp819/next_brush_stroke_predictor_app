@@ -58,7 +58,6 @@ class ConfigDataWindow(tk.Toplevel):
     def set_info_pane(self, info_pane):
         self.info_pane = info_pane 
 
-
     def create_header(self, container: tk.Frame):
         header_frame = tk.Frame(container, bg=UI_COLOR)
 

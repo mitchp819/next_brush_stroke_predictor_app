@@ -13,7 +13,7 @@ except ImportError:
     print("Error: windll not imported. Text may be blurred")
     pass
 
-from app import  ImageProcessor, greyscale_value_to_hex, shape_img, get_a_DATABASE, get_LOADED_DB, get_last_file_by_id, canvas_np_img_to_png, UI_COLOR, ASSETS_DIR, DATA_DIR
+from app import  ImageProcessor, greyscale_value_to_hex, shape_img, get_a_DATABASE, get_LOADED_DB, get_last_file_by_id, canvas_np_img_to_png, UI_COLOR, ASSETS_DIR, DATA_DIR, SIMILAR_IMAGES_DIR
 
 class DrawingCanvasFrame(ttk.Frame):
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
@@ -182,7 +182,7 @@ class DrawingCanvasFrame(ttk.Frame):
         img_flat = self.np_main_canvas_data.flatten() / 255
         filler =  np.array([.5])
         input_img = np.concatenate((img_flat, filler))
-        Image.fromarray(self.np_main_canvas_data.astype('uint8'), 'L').save("assets/similar-images/input_canvas.png")
+        Image.fromarray(self.np_main_canvas_data.astype('uint8'), 'L').save(os.path.join(SIMILAR_IMAGES_DIR, "input_img.png"))
 
         #Send input to image_processing script
         output_stroke = self.img_generator.compare_img_with_downscaled_data_set(input_img, type)
@@ -258,7 +258,7 @@ def get_edge_count(np_image: np.array):
             edges[x,y] = edge_value
             if edge_value > 0: 
                 edge_count += 1
-    Image.fromarray(edges.astype('uint8'), 'L').save("assets/edges.png")
+    Image.fromarray(edges.astype('uint8'), 'L').save(os.path.join(ASSETS_DIR, "edges.png"))
     return edge_count
 
 def get_shape_count(np_image: np.array):
