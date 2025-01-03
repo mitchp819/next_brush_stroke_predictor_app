@@ -12,7 +12,7 @@ except ImportError:
 from app import UI_COLOR, SECONDARY_COLOR, DATA_DIR, HEADER_HEIGHT, TRIM_COLOR, BG_COLOR
 
 class DeleteDatabase(tk.Toplevel):
-    def __init__(self):
+    def __init__(self, config_data_window = None):
         super().__init__()
         self.title("Delete Database")
 
@@ -20,6 +20,7 @@ class DeleteDatabase(tk.Toplevel):
         self.resizable(False, True)
         self.config(bg=UI_COLOR)
         self.db_list = os.listdir(DATA_DIR)
+        self.config_data_window = config_data_window
 
         main_frame = tk.Frame(self, bg=UI_COLOR)
         main_frame.pack(fill='both',expand=True, padx=2, pady=2)
@@ -63,5 +64,7 @@ class DeleteDatabase(tk.Toplevel):
                 shutil.rmtree(delete_path)
             else:
                 print("Error: Path For Deletion Does Not Exist")
+        self.config_data_window.create_new_config_data_window()
+        self.config_data_window.destroy()
         self.destroy()
         pass

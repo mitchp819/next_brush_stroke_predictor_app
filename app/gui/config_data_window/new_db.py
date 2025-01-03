@@ -11,14 +11,17 @@ except ImportError:
 
 from app import UI_COLOR, SECONDARY_COLOR, DATA_DIR, HEADER_HEIGHT, TRIM_COLOR, BG_COLOR
 
+
 class NewDB(tk.Toplevel):
-    def __init__(self):
+    def __init__(self, config_data_window):
         super().__init__()
         self.title("Create New Database")
 
         self.geometry(f"{500}x{200}+300+300")
         self.resizable(False, False)
         self.config(bg=UI_COLOR)
+
+        self.config_data_window = config_data_window
 
         main_frame = tk.Frame(self, bg=UI_COLOR)
         main_frame.pack(fill='both',expand=True, padx=2, pady=2)
@@ -87,6 +90,8 @@ class NewDB(tk.Toplevel):
                 os.makedirs(fi)
                 os.makedirs(gd)
                 os.makedirs(imd)
+                self.config_data_window.create_new_config_data_window()
+                self.config_data_window.destroy()
                 self.destroy()
         pass
          

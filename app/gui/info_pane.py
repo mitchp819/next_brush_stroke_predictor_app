@@ -130,14 +130,12 @@ class InfoPane(tk.Frame):
 
         folder_path = os.path.join(ASSETS_DIR, "similar-images")
 
-        self.load_image(grid_container= self.images_frame, row=1, column=0, scale=1, file_name="input_canvas.png")
+        self.load_image(grid_container= self.images_frame, row=1, column=0, scale=1, file_name="input_img.png")
         self.load_image(grid_container= self.images_frame, row=2, column=0, scale=2, file_name="input64.png")
         self.load_image(grid_container= self.images_frame, row=3, column=0, scale=4, file_name="input32.png")
         self.load_image(grid_container= self.images_frame, row=4, column=0, scale=8, file_name="input16.png")
         self.load_image(grid_container= self.images_frame, row=5, column=0, scale=16, file_name="input8.png")
         self.load_image(grid_container= self.images_frame, row=6, column=0, scale=32, file_name="input4.png")
-
-
 
         self.load_image(grid_container= self.images_frame, row=1, column=1, scale=1, file_name="similar128.png")
         self.load_image(grid_container= self.images_frame, row=2, column=1, scale=2, file_name="similar64.png")

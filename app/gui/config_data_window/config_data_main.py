@@ -63,7 +63,7 @@ class ConfigDataWindow(tk.Toplevel):
 
         new_db_btn = tk.Button(header_frame,
                                text="Create New Database",
-                               command= NewDB,
+                               command= lambda: NewDB(self),
                                width=30,
                                bg=SECONDARY_COLOR,
                                font=("TkDefaultFont", 10),
@@ -73,7 +73,7 @@ class ConfigDataWindow(tk.Toplevel):
 
         delete_db = tk.Button(header_frame,
                                text="Delete Existing Database",
-                               command= DeleteDatabase,
+                               command= lambda: DeleteDatabase(self),
                                width=30,
                                bg=SECONDARY_COLOR,
                                font=("TkDefaultFont", 10),
@@ -215,6 +215,11 @@ class ConfigDataWindow(tk.Toplevel):
         set_LOADED_DB(loaded_db)
         self.info_pane.set_db_generating_lbl()
         self.console.print_to_console(f"Loaded Database for generation: {loaded_db}")
+        pass
+
+    def create_new_config_data_window(self):
+        new_self = ConfigDataWindow()
+        new_self.set_info_pane(self.info_pane)
         pass
 
 def create_db_list():

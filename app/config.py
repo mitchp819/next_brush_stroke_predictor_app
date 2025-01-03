@@ -33,14 +33,12 @@ def get_base_path():
     return base_path
 
 
-current_dir = get_base_path()
-ROOT_DIR = os.path.abspath(os.path.join(current_dir, ".."))
+ROOT_DIR = get_base_path()
 DATA_DIR = os.path.abspath(os.path.join(ROOT_DIR, "data"))
 ASSETS_DIR = os.path.abspath(os.path.join(ROOT_DIR, "assets"))
 SIMILAR_IMAGES_DIR = os.path.abspath(os.path.join(ASSETS_DIR, "similar-images"))
 SAVED_IMAGES_DIR = os.path.abspath(os.path.join(ASSETS_DIR, "saved-images"))
 
-check_dir(current_dir)
 check_dir(DATA_DIR)
 check_dir(ASSETS_DIR)
 check_dir(SIMILAR_IMAGES_DIR)
