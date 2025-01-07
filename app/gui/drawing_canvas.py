@@ -16,6 +16,7 @@ except ImportError:
 from app import  ImageProcessor, greyscale_value_to_hex, shape_img, get_a_DATABASE, get_LOADED_DB, get_last_file_by_id, canvas_np_img_to_png, UI_COLOR, ASSETS_DIR, DATA_DIR, SIMILAR_IMAGES_DIR
 
 class DrawingCanvasFrame(ttk.Frame):
+    """Drawing Canvas Frame that collects (prev-canvas, brush_stroke) pairs and saves as dataset"""
     def __init__(self, container, image_scalor = 6, image_width = 128, image_height = 128):
         super().__init__(container)
 
@@ -158,6 +159,7 @@ class DrawingCanvasFrame(ttk.Frame):
     def reset_stroke(self):
         self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)
         self.app_console.print_to_console("Stroke Data Reset")
+        self.last_canvas = self.np_main_canvas_data.flatten()
         print("Stroke Data Reset")
         pass
 
@@ -224,15 +226,22 @@ class DrawingCanvasFrame(ttk.Frame):
                 self.canvas.create_rectangle(col * self.img_sclr, row * self.img_sclr, (col+1) * self.img_sclr,
                                               (row+1) * self.img_sclr , outline = greyscale_hex, fill=greyscale_hex)
                 self.np_main_canvas_data[row, col] = pixel_value
+        self.last_canvas = self.np_main_canvas_data.flatten()
         pass
 
     def flood_canvas(self):
+        """
+        Fills the canvas with a single greyscale value
+        Args:
+            self (DrawingCanvasFrame): The DrawingCanvasFrame object
+        """
         greyscale_value = self.brush_tool.get_greyscale_value()
         greyscale_hex = greyscale_value_to_hex(greyscale_value)
 
         self.canvas.create_rectangle(0, 0, self.win_x+self.img_sclr, self.win_y+self.img_sclr, fill=greyscale_hex, outline=greyscale_hex)
         self.np_main_canvas_data = np.full((self.img_x, self.img_y), greyscale_value)
         self.np_stroke_canvas_data = np.full((self.img_x, self.img_y), -1)
+        self.last_canvas = self.np_main_canvas_data.flatten()
 
 def get_edge_to_shape_ratio(np_stroke_img: np.array):
     edge_count = get_edge_count(np_stroke_img)
@@ -262,6 +271,15 @@ def get_edge_count(np_image: np.array):
     return edge_count
 
 def get_shape_count(np_image: np.array):
+    """
+    Counts the number non-blank pixels on a canvas.
+
+    Args:
+        np_image (2d np.array): (width, height) = pixel value
+    
+    Returns:
+        int: The Count of non-blank pixels
+    """
     shape_count = 0
     for x in range(np_image.shape[0]):
         for y in range(np_image.shape[1]):
