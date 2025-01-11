@@ -81,7 +81,7 @@ class DrawingCanvasFrame(ttk.Frame):
         if self.data_gather_tool.get_data_gather_mode() == 'auto':
             self.save_stroke_to_dataset()
         pass
-
+    
     def create_mark(self, event):
         greyscale_value = self.brush_tool.get_greyscale_value()
         greyscale_hex = greyscale_value_to_hex(greyscale_value)

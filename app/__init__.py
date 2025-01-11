@@ -23,6 +23,8 @@ from .gui.main_window import MainWindow
 
 
 
-__all__ = ["ImageProcessor","WindowHeader", "BrushTool", "GenerateTool", "HeaderTool", "InfoPane", "AppConsole", "ConfigDataWindow" "DrawingCanvasFrame", "MainWindow"]
+__all__ = ["ImageProcessor","WindowHeader", "BrushTool", "GenerateTool", 
+           "HeaderTool", "InfoPane", "AppConsole", "ConfigDataWindow", 
+           "DrawingCanvasFrame", "MainWindow"]
 
 

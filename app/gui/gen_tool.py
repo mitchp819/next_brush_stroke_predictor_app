@@ -10,12 +10,12 @@ except ImportError:
 
 from app import UI_COLOR, BG_COLOR, TRIM_COLOR, SECONDARY_COLOR, HEADER_HEIGHT, RIGHT_PANE_WIDTH
   
-
+DEFAULT_THRESHOLD = 50
 class GenerateTool(tk.Frame):
     def __init__(self, container):
         super().__init__(container)
         self.threshold = tk.IntVar()
-        self.threshold.set(500)
+        self.threshold.set(DEFAULT_THRESHOLD)
 
         self.threshold128 = tk.IntVar()
         self.threshold64 = tk.IntVar()
@@ -23,12 +23,12 @@ class GenerateTool(tk.Frame):
         self.threshold16 = tk.IntVar()
         self.threshold8 = tk.IntVar()
         self.threshold4 = tk.IntVar()
-        self.threshold128.set(500)
-        self.threshold64.set(500)
-        self.threshold32.set(500)
-        self.threshold16.set(500)
-        self.threshold8.set(500)
-        self.threshold4.set(500)
+        self.threshold128.set(DEFAULT_THRESHOLD)
+        self.threshold64.set(DEFAULT_THRESHOLD)
+        self.threshold32.set(DEFAULT_THRESHOLD)
+        self.threshold16.set(DEFAULT_THRESHOLD)
+        self.threshold8.set(DEFAULT_THRESHOLD)
+        self.threshold4.set(DEFAULT_THRESHOLD)
         
         self.tab_index = 0
 
